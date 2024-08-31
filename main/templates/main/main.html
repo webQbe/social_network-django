@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coding Cafe - login and signup</title>
+    <!-- Load the static template tag -->
+    {% load static %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'main/css/style.css' %}">
+</head>
+<body>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="well">
+                <center><h1>Coding Cafe</h1></center>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6" style="left:0.5%;">
+            <img src="{% static 'main/images/codingcafe.jpeg' %}" class="img-rounded" title="Coding cafe" width="650px" height="565px">
+            <div id="centered1" class="centered">
+                <h3 style="color:white;">
+                    <span class="glyphicon glyphicon-search"></span>
+                    &nbsp;&nbsp;
+                    <strong>Follow Your Interests.</strong>
+                </h3>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
