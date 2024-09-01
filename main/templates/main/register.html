@@ -1,4 +1,4 @@
-{% extends 'main.html' %}
+{% extends 'main/main.html' %}
 {% block title %}Join Coding Cafe{% endblock %}
 {% block content %}
     <div class="col-sm-12">
@@ -8,6 +8,7 @@
             </div>
             <div class="l-part">
                 <form action="" method="POST">
+                    {% csrf_token %}
                     <div class="input-group">
                         <span class="input-group-addon">
                             <i class="glyphicon glyphicon-pencil"></i>
