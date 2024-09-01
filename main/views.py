@@ -5,12 +5,10 @@ from django.contrib.auth.views import LoginView as AuthLoginView
 # Create your views here.
 
 def main_page(request):
-    return render(request, 'main/main.html')
+    return render(request, 'main.html')
 
-class SignupView(View):
-    def get(self, request):
-        # Your signup logic
-        return render(request, 'signup.html')
+def signup_view(request):
+    return render(request, 'signup.html')
     
-class LoginView(AuthLoginView):
-    template_name = 'login.html'
+def login_view(request):
+    return render(request, 'login.html')

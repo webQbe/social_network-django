@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coding Cafe - login and signup</title>
+    <title>{% block title %}Coding Cafe - login and signup{% endblock %}</title>
     <!-- Load the static template tag -->
     {% load static %}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -63,6 +63,23 @@
         background-color: #187fab;
     }
 
+    .main-content{
+        width:50%; 
+        height: 40%;
+        margin: 10px auto;
+        background-color: #fff;
+        border: 2px solid #e6e6e6;
+        padding: 40px 50px;
+    }
+    .header{
+        border: 0px solid #000;
+        margin-bottom: 5px;
+    }
+    #signup{
+        width: 60%;
+        border-radius: 30px;
+    }
+
 </style>
 <body>
     <div class="row">
@@ -73,6 +90,7 @@
         </div>
     </div>
     <div class="row">
+        {% block content %}  
         <div class="col-sm-6" style="left:0.5%;">
             <img src="{% static 'main/images/codingcafe.jpeg' %}" class="img-rounded" title="Coding cafe" width="650px" height="565px">
             <div id="centered1" class="centered">
@@ -108,10 +126,9 @@
                 <!-- If the user clicks on the signup button, direct him 
                  to the signup page -->
                 <button id="login" class="btn btn-info btn-lg" name="login" formaction="{% url 'login' %}">Login</button><br><br>
-                <!-- If the user clicks on the login button, direct him 
-                 to the login page -->
             </form>
         </div>
+        {% endblock %}
     </div>
 </body>
 </html>
