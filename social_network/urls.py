@@ -21,5 +21,6 @@ from users import views
 urlpatterns = [
     path('register/', views.register_view, name='register'),
     path('admin/', admin.site.urls),
-    path('', include('main.urls'))
+    path('', include('main.urls')),
+    path('users/', include('users.urls')),  # User app urls
 ]
