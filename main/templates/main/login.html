@@ -9,7 +9,17 @@
                 </h3>
             </div>
             <div class="l-part">
-                <form action="" method="POST">
+                <!-- Display messages -->
+                 {% if messages %}
+                    <div class="alert alert-danger">
+                        {% for message in messages %}
+                            <p> {{ message }} </p>
+                        {% endfor %}
+                    </div>
+                 {% endif %}
+
+                <form action="{% url 'login' %}" method="POST">
+                    {% csrf_token %}
                     <input type="email" name="email" placeholder="Email" class="form-control input-md" required="required"><br>
                     <div class="overlap-text">
                         <input type="password" name="pass" placeholder="Password" required="required" class="form-control input-md"><br>
