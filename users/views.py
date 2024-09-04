@@ -9,11 +9,16 @@ from main.models import UserProfile
 
 # Create your views here.
 
-@login_required
+@login_required(login_url='/')
 def home_view(request):
-    return render(request, 'users/home.html')
+    user_profile = get_object_or_404(UserProfile, user=request.user)
+    context = {
+        'user_profile':user_profile,
+    }
+    return render(request, 'users/home.html', context)
 
-@login_required
+
+@login_required(login_url='/')
 def profile_view(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     user_profile = get_object_or_404(UserProfile, user=user)
@@ -23,25 +28,25 @@ def profile_view(request, user_id):
     }
     return render(request, 'users/profile.html', context)
 
-@login_required
+@login_required(login_url='/')
 def find_view(request):
     return render(request, 'users/find_people.html')
 
-@login_required
+@login_required(login_url='/')
 def message_view(request):
     return render(request, 'users/message.html')
 
-@login_required
+@login_required(login_url='/')
 def myPosts_view(request, user_id):
     user_posts = get_object_or_404(UserProfile, user_id=user_id)
     return render(request, 'users/myposts.html', {'user_posts':user_posts})
 
-@login_required
+@login_required(login_url='/')
 def editProfile_view(request, user_id):
     user_profile = get_object_or_404(UserProfile, user_id=user_id)
     return render(request, 'users/edit_profile.html', {'user_profile':user_profile})
 
-@login_required
+@login_required(login_url='/')
 def search_view(request):
     return render(request, 'users/search.html')
 

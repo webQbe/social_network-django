@@ -23,7 +23,7 @@
                 <ul class="nav navbar-nav">
                     {% if user.is_authenticated %}
                         {% with user.profile as profile %}
-                            <li><a href="{% url 'profile' user.id %}">{{ user.first_name }}</a></li>
+                        <li><a href="{% url 'profile' user.id %}">{{ user.first_name }}</a></li>
                         {% endwith %}
                         <li><a href="{% url 'home' %}">Home</a></li>
                         <li><a href="{% url 'find' %}">Find People</a></li>
@@ -33,7 +33,7 @@
                                 <span><i class="glyphicon glyphicon-chevron-down"></i></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a href="#">My Posts <span class="badge badge-secondary">0</span> </a></li>
+                                <li><a href="#">My Posts <span class="badge badge-secondary"> {{ user_profile.posts }} </span> </a></li>
                                 <li><a href="#">Edit Account</a></li>
                                 <li role="separator" class="divider"></li>
                                 <li><a href="{% url 'logout' %}">Logout</a></li>
