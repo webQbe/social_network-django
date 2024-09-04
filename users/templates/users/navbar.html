@@ -13,18 +13,18 @@
             <ul class="nav navbar-nav">
                 {% if user.is_authenticated %}
                 {% with user.profile as profile %}
-                    <li><a href="{% url 'profile' profile.user.id %}">{{ profile.user.first_name }}</a></li>
+                    <li><a href="{% url 'profile' user.id %}">{{ user.first_name }}</a></li>
                 {% endwith %}
                 <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'find_people' %}">Find People</a></li>
-                <li><a href="{% url 'messages' %}">Messages</a></li>
+                <li><a href="{% url 'find' %}">Find People</a></li>
+                <li><a href="{% url 'message' %}">Messages</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                         <span><i class="glyphicon glyphicon-chevron-down"></i></span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a href="{% url 'my_posts' profile.user.id %}">My Posts</a></li>
-                        <li><a href="{% url 'edit_profile' profile.user.id %}">Edit Account</a></li>
+                        <li><a href="#">My Posts</a></li>
+                        <li><a href="#">Edit Account</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a href="{% url 'logout' %}">Logout</a></li>
                     </ul>
