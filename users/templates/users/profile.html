@@ -1,7 +1,6 @@
-{% extends 'users/home.html' %}
-
+{% extends 'users/navbar.html' %}
 {% block title %}
-    {{ user.username }} on Code Cafe
+    {{ user.first_name }} {{ user.last_name }}
 {% endblock %}
 
 {% block content %}

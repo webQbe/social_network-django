@@ -15,9 +15,13 @@ def home_view(request):
 
 @login_required
 def profile_view(request, user_id):
-    user = get_object_or_404(User, id=user_id)
+    user = get_object_or_404(User, pk=user_id)
     user_profile = get_object_or_404(UserProfile, user=user)
-    return render(request, 'users/profile.html', {'user': user, 'user_profile': user_profile})
+    context = {
+        'user': user,
+        'user_profile': user_profile,
+    }
+    return render(request, 'users/profile.html', context)
 
 @login_required
 def find_view(request):
