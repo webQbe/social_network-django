@@ -4,6 +4,36 @@
 {% endblock %}
 
 {% block content %}
+<div class="row">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-8">
+        <div>
+            <!-- Display the cover image -->
+            <div>
+                <img id="cover-img" class="img-rounded" src="{{ user_profile.user_cover.url }}" alt="cover">
+            </div>
+
+            <!-- Form to update the cover image -->
+            <form action="{% url 'profile' user.id %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <ul class="nav pull-left" style="position:absolute; top:10px; left:40px;">
+                    <li class="dropdown">
+                        <button class="dropdown-toggle btn btn-default" data-toggle="dropdown">Change Cover</button>
+                        <div class="dropdown-menu">
+                            <center>
+                                <p>Click <strong>Select Cover</strong> and then click the <br> <strong>Update Cover</strong></p>
+                                <label class="btn btn-info">Select Cover
+                                    <input type="file" name="u_cover" size="60" />
+                                </label><br><br>
+                                <button name="submit" class="btn btn-info">Update Cover</button>
+                            </center>
+                        </div>
+                    </li>
+                </ul>
+            </form>
+        </div>
+    </div>
+</div>
 <div class="profile-header">
     <h1>{{ user.username }}</h1>
     <p>{{ user_profile.describe_user }}</p>

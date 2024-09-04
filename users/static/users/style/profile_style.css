@@ -1,0 +1,14 @@
+#cover-img{
+    height: 400px;
+    width: 100%;
+}
+
+label{
+    padding: 7px;
+    display: table;
+    color: #fff;
+}
+
+input[type="file"]{
+    display: none;
+}

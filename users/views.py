@@ -22,6 +22,13 @@ def home_view(request):
 def profile_view(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     user_profile = get_object_or_404(UserProfile, user=user)
+
+    if request.method == 'POST':
+        if 'u_cover' in request.FILES:
+            user_profile.user_cover = request.FILES['u_cover']
+            user_profile.save()
+            return redirect('profile', user_id=user.id)
+
     context = {
         'user': user,
         'user_profile': user_profile,
