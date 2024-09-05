@@ -6,6 +6,9 @@ from django.contrib import messages
 from django.views import View
 from main.models import UserProfile
 from .forms import CoverUpdateForm
+from django.http import HttpResponse
+from django.utils.crypto import get_random_string
+import os
 
 
 # Create your views here.
@@ -32,18 +35,47 @@ def profile_view(request, user_id):
     return render(request, 'users/profile.html', context)
 
 
-@login_required(login_url='/')
+@login_required
 def updateCover_view(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     user_profile = get_object_or_404(UserProfile, user=user)
 
     if request.method == 'POST':
+        print('Form submission detected')
         form = CoverUpdateForm(request.POST, request.FILES, instance=user_profile)
+
         if form.is_valid():
-            form.save()
+            print('Form is valid')
+            cover = request.FILES.get('user_cover')
+            
+            if cover:
+                # Debugging file properties
+                print(f"File name: {cover.name}")
+                print(f"File content_type: {cover.content_type}")
+                print(f"File size: {cover.size}")
+
+                # Generate a unique filename and save
+                random_str = get_random_string(8) 
+                file_name, file_extension = os.path.splitext(cover.name)
+                print(f"File extension: {file_extension}")
+
+                # In case no extension is detected
+                if not file_extension:
+                    print("No valid file extension detected")
+                    # Handle the error (return form invalid)
+                    form.add_error('user_cover', 'File does not have a valid extension.')
+                    return render(request, 'users/profile.html', {'form': form})
+                
+                new_filename = f"cover_{random_str}{file_extension}"
+                user_profile.user_cover.name = f'{new_filename}'
+                user_profile.save()
+
             return redirect('profile', user_id=user.id)
+           
         else:
-            return render(request, 'users/profile.html', {'form':form, 'user_profile':user_profile})
+            print('Form is invalid') 
+            print(form.errors)
+            return redirect('profile', user_id=user.id)
 
     return redirect('profile', user_id=user.id)
 

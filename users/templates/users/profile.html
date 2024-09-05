@@ -14,7 +14,7 @@
             </div>
 
             <!-- Form to update the cover image -->
-            <form action="{% url 'update_cover' user.id %}" method="post" enctype="multipart/form-data">
+            <form action="{% url 'update_cover' user.id %}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <ul class="nav pull-left" style="position:absolute; top:10px; left:40px;">
                     <li class="dropdown">
@@ -23,13 +23,24 @@
                             <center>
                                 <p>Click <strong>Select Cover</strong> and then click the <br> <strong>Update Cover</strong></p>
                                 <label class="btn btn-info">Select Cover
-                                    <input type="file" name="u_cover" size="60" />
+                                    <input type="file" name="user_cover" size="60" />
                                 </label><br><br>
                                 <button name="submit" class="btn btn-info">Update Cover</button>
                             </center>
                         </div>
                     </li>
                 </ul>
+                {% if form.errors %}
+                    <div class="alert alert-danger">
+                    <ul>
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                    </div>
+                {% endif %}
             </form>
         </div>
         <!-- Display the profile image -->

@@ -15,4 +15,6 @@ urlpatterns = [
     #path('editprofile/<int:user_id>/', views.editProfile_view, name='edit_profile'),
     path('logout/', LogoutView.as_view(next_page='/'), name='logout'),
     path('search/', views.search_view, name='search_results'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] 
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
