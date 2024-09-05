@@ -32,9 +32,23 @@
                 </ul>
             </form>
         </div>
+        <!-- Display the profile image -->
+        <div id="profile-img">
+            <img src="{{ user_profile.user_image.url }}" alt="Profile" class="img-circle" width="180px" height="185px">
+
+            <!-- Form to update the profile image -->
+            <form action="{% url 'profile' user.id %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label id="update_profile">Select Image
+                    <input type="file" name="u_image" size="60" />
+            </label><br><br>
+            <button id="button_profile" name="update" class="btn btn-info">Update Profile</button>
+
+            </form>
+        </div><br>
     </div>
 </div>
-<div class="profile-header">
+<!-- <div class="profile-header">
     <h1>{{ user.username }}</h1>
     <p>{{ user_profile.describe_user }}</p>
 </div>
@@ -46,5 +60,5 @@
     <p><strong>Gender:</strong> {{ user_profile.user_gender }}</p>
     <p><strong>Birthday:</strong> {{ user_profile.user_birthday }}</p>
     <p><strong>Posts:</strong> {{ user_profile.posts }}</p>
-</div>
+</div> -->
 {% endblock %}

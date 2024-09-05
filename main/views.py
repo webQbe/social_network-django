@@ -64,7 +64,7 @@ def register_view(request):
            
 
             # Assign a random profile image
-            user_image = f'head_{["red", "sunflower", "turquoise"][User.objects.count() % 3]}.png'
+            user_image = f'profile_pics/head_{["red", "sunflower", "turquoise"][User.objects.count() % 3]}.png'
 
             # Create the UserProfile with the user instance
             profile = UserProfile.objects.create(
