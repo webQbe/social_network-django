@@ -14,7 +14,7 @@
             </div>
 
             <!-- Form to update the cover image -->
-            <form action="{% url 'profile' user.id %}" method="post" enctype="multipart/form-data">
+            <form action="{% url 'update_cover' user.id %}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <ul class="nav pull-left" style="position:absolute; top:10px; left:40px;">
                     <li class="dropdown">
@@ -46,6 +46,7 @@
 
             </form>
         </div><br>
+    
     </div>
 </div>
 <!-- <div class="profile-header">

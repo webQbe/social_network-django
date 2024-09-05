@@ -6,6 +6,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
+    path('update_cover/<int:user_id>/', views.updateCover_view, name="update_cover"),
     path('home/', views.home_view, name='home'),
     path('profile/<int:user_id>/', views.profile_view, name='profile'),
     path('find/', views.find_view, name='find'),
