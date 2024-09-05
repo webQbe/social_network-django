@@ -14,7 +14,7 @@ urlpatterns = [
     path('message/', views.message_view, name='message'),
     #path('myposts/<int:user_id>/', views.myPosts_view, name='my_posts'),
     #path('editprofile/<int:user_id>/', views.editProfile_view, name='edit_profile'),
-    path('logout/', LogoutView.as_view(next_page='/'), name='logout'),
+    path('logout/', views.logout_view, name='logout'),
     path('search/', views.search_view, name='search_results'),
 ] 
 if settings.DEBUG:

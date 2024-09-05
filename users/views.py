@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -125,7 +125,10 @@ def updateProfileImage_view(request, user_id):
     return redirect('profile', user_id=user.id)
 
 
-
+@login_required
+def logout_view(request):
+    logout(request)
+    return redirect('main_page')
 
 @login_required(login_url='/')
 def find_view(request):

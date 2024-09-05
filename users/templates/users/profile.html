@@ -67,20 +67,26 @@
             {% endif %}
             </form>
         </div><br>
-    
+    </div>
+    <div class="col-sm-2">
     </div>
 </div>
-<!-- <div class="profile-header">
-    <h1>{{ user.username }}</h1>
-    <p>{{ user_profile.describe_user }}</p>
+<div class="row">
+    <div class="col-sm-2">
+    </div>
+    <div class="col-sm-2" style="background-color: #e6e6e6;text-align: center; left: 0.9%; border-radius: 5px;">
+        <center><h2><strong>About</strong></h2></center>
+        <center><h4><strong>{{ user.first_name }} {{ user.last_name }}</strong></h4></center>
+        <p><strong><i style="color:gray;">{{ user_profile.describe_user }}</i></strong></p><br>
+        <p><strong>Relationship Status: </strong>{{ user_profile.relationship }}</p><br>
+        <p><strong>Lives in: </strong>{{ user_profile.user_country }}</p><br>
+        <p><strong>Member since: </strong>{{ user_profile.user_reg_date }}</p><br>
+        <p><strong>Gender: </strong>{{ user_profile.user_gender }}</p><br>
+        <p><strong>Date of birth: </strong>{{ user_profile.user_birthday }}</p><br>
+    </div>
 </div>
-<div class="profile-details">
-    <p><strong>First Name:</strong> {{ user.first_name }}</p>
-    <p><strong>Last Name:</strong> {{ user.last_name }}</p>
-    <p><strong>Email:</strong> {{ user.email }}</p>
-    <p><strong>Country:</strong> {{ user_profile.user_country }}</p>
-    <p><strong>Gender:</strong> {{ user_profile.user_gender }}</p>
-    <p><strong>Birthday:</strong> {{ user_profile.user_birthday }}</p>
-    <p><strong>Posts:</strong> {{ user_profile.posts }}</p>
-</div> -->
 {% endblock %}
+
+
+
+
