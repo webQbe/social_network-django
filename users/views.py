@@ -11,6 +11,7 @@ from django.http import HttpResponse
 from django.utils.crypto import get_random_string
 import os
 from django.middleware.csrf import CsrfViewMiddleware
+from django.core.files.storage import default_storage
 
 
 # Create your views here.
@@ -131,16 +132,61 @@ def updateProfileImage_view(request, user_id):
 @login_required
 def create_post_view(request):
     if request.method == 'POST':
-        form = PostForm(request.POST, request.FILES)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.user = request.user  # Assign the logged-in user
-            post.save()
-            return redirect('home')  # Redirect to home after successful post
-    else:
-        form = PostForm()
+       content = request.POST.get('post_content', '').strip()
+       upload_image = request.FILES.get('upload_image')
+
+       # Generate a random number for the image name
+       random_number = get_random_string(8)
+       
+       # Image handling
+       if upload_image:
+           # Construct a new filename
+           _, extension = os.path.splitext(upload_image.name)
+           new_filename = f"{upload_image.name.split('.')[0]}_{random_number}{extension}"
+           
+           # Save the uploaded image
+           image_path = f"imagepost/{new_filename}"
+           default_storage.save(image_path, upload_image)
+
+       # Validate content length
+       if len(content) > 250:
+           return render(request, 'users/home.html', {
+               'form':PostForm(),
+                'error':"Please use 250 or fewer characters!"})
+
+        # Check conditions for post submission
+       if upload_image and content:
+           # Save both content and image
+           post = Post(user=request.user, post_content=content, upload_image=image_path)
+           post.save()
+           # Optionally update the user's post status
+           request.user.userprofile.posts = "Yes"
+           request.user.userprofile.save()
+
+       elif content == '' and upload_image:
+           # Only image is provided, save the image
+           post = Post(user=request.user, upload_image=image_path)
+           post.save()
+
+       elif content:
+           # Only content is provided, no image
+           post = Post(user=request.user, post_content=content)
+           post.save()
+
+       else:
+           return redirect('home')
+       
+       # Redirect after saving the post
+       return redirect('home')
     
-    return render(request, 'users/home.html', {'form': form})
+    # If it's not a POST request, render the form
+    return render(request, 'users/home.html', {'form':PostForm()})
+
+
+
+               
+               
+           
 
 
 @login_required

@@ -12,6 +12,11 @@
                 </label>
                 <button id="btn-post" class="btn btn-success" name="sub">Post</button>
             </form>
+            {% if error %}
+                <div class="alert alert-danger">
+                    {{ error }}
+                </div>
+            {% endif %}
         </center>
     </div>
 </div>
