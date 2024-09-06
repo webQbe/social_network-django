@@ -5,10 +5,12 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.views import View
 from main.models import UserProfile
-from .forms import CoverUpdateForm, ProfilePicUpdateForm
+from .models import Post
+from .forms import CoverUpdateForm, ProfilePicUpdateForm, PostForm
 from django.http import HttpResponse
 from django.utils.crypto import get_random_string
 import os
+from django.middleware.csrf import CsrfViewMiddleware
 
 
 # Create your views here.
@@ -16,6 +18,7 @@ import os
 @login_required(login_url='/')
 def home_view(request):
     user_profile = get_object_or_404(UserProfile, user=request.user)
+
     context = {
         'user_profile':user_profile,
     }
@@ -126,6 +129,21 @@ def updateProfileImage_view(request, user_id):
 
 
 @login_required
+def create_post_view(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.user = request.user  # Assign the logged-in user
+            post.save()
+            return redirect('home')  # Redirect to home after successful post
+    else:
+        form = PostForm()
+    
+    return render(request, 'users/home.html', {'form': form})
+
+
+@login_required
 def logout_view(request):
     logout(request)
     return redirect('main_page')
@@ -151,6 +169,9 @@ def editProfile_view(request, user_id):
 @login_required(login_url='/')
 def search_view(request):
     return render(request, 'users/search.html')
+
+def csrf_failure(request, reason=""):
+    return render(request, 'csrf_failure.html', {'reason': reason})
 
 
 

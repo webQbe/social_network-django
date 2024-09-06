@@ -136,3 +136,5 @@ MEDIA_URL = '/media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = 'login'  # Redirect to login page if user is not authenticated
+
+CSRF_FAILURE_VIEW = 'django.views.csrf.csrf_failure'

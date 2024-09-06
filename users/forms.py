@@ -1,5 +1,6 @@
 from django import forms
 from main.models import UserProfile
+from .models import Post
 
 class CoverUpdateForm(forms.ModelForm):
     class Meta:
@@ -26,3 +27,19 @@ class ProfilePicUpdateForm(forms.ModelForm):
         if u_image and not u_image.name.endswith(('.png', '.jpg', '.jpeg')):
             raise forms.ValidationError("Only .png, .jpg, and .jpeg formats are allowed.")
         return u_image
+    
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['post_content', 'upload_image', ] 
+
+    def clean_postImage(self):
+        p_image = self.cleaned_data.get('upload_image', False)
+        if not p_image:
+            raise forms.ValidationError("Please upload a valid post image.")
+        if p_image and not p_image.name.endswith(('.png', '.jpg', '.jpeg')):
+            raise forms.ValidationError("Only .png, .jpg, and .jpeg formats are allowed.")
+        return p_image
+    
+
