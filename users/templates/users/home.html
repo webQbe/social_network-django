@@ -24,6 +24,49 @@
     <div class="col-sm-12">
         <center><h2><strong>News Feed</strong></h2><br></center>
         <!-- display posts of the user here -->
+        {% for post in posts %}
+        <div class="row">
+            <div class="col-sm-3">
+            </div>
+            <div id="posts" class="col-sm-6">
+                <!-- user details -->
+                <div class="row">
+                    <div class="col-sm-2">
+                        <p><img src="{{ post.user.userprofile.user_image.url }}" class="img-circle" width="100px" height="100px"></p>
+                    </div>
+                    <div class="col-sm-6">
+                        <h3><a style="text-decoration:none; cursor:pointer; color:#3897f0; " href="{% url 'profile' post.user.id %}">
+                            {{ post.user.username }}
+                            </a></h3>
+                        <h4><small style="color:black;">Updated a post on <strong>{{ post.post_date }}</strong></small></h4>
+                    </div>
+                    <div class="col-sm-4">
+                    </div>
+                </div>
+                <!-- post details -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <!--if a post only has an image-->
+                        {% if post.upload_image %}
+                        <img id="posts-img" src="{{ post.upload_image.url }}" style="height:350px;">
+                        
+                        <!--if a post has an image and content -->
+                        {% elif post.post_content and post.upload_image %}
+                        <p>{{ post.post_content }}</p>
+                        <img id="posts-img" src="{{ post.upload_image.url }}" style="height:350px;">
+                    
+                        <!--if a post is text only-->
+                        {% elif post.post_content %}
+                        <p>{{ post.post_content }}</p>
+                        {% endif %}
+                    </div>
+                </div><br>
+                <a href="{% url 'post_detail' post.post_id %}" style="float:right;"><button class="btn btn-info">Comment</button></a><br>
+            </div>
+            <div class="col-sm-3"></div>
+        </div><br><br>
+        {% endfor %}
+        <!-- Pagination links -->
     </div>
 </div>
 {% endblock %}

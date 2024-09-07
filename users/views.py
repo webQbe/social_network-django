@@ -12,6 +12,7 @@ from django.utils.crypto import get_random_string
 import os
 from django.middleware.csrf import CsrfViewMiddleware
 from django.core.files.storage import default_storage
+from django.core.paginator import Paginator
 
 
 # Create your views here.
@@ -183,7 +184,23 @@ def create_post_view(request):
     return render(request, 'users/home.html', {'form':PostForm()})
 
 
+@login_required
+def get_posts_view(request):
+    per_page = 4 # posts per page
 
+    # fetch posts ordered by post_date descending
+    posts = Post.objects.all().order_by('-post_date')
+
+    # pagination
+    paginator = Paginator(posts, per_page)
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'posts':page_obj, # paginated posts
+    }
+
+    return render(request, 'home', context)
                
                
            
