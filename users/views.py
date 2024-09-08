@@ -24,8 +24,16 @@ def home_view(request):
     # fetch all posts
     posts = Post.objects.all().order_by('-post_date')
 
+    # pagination
+    per_page = 4 # Posts per page
+
+    # Pagination logic
+    all_pages = Paginator(posts, per_page) 
+    page_number = request.GET.get('page', 1)
+    page = all_pages.get_page(page_number)
+
     context = {
-        'posts':posts,
+        'posts':page,
         'user_profile':user_profile,
     }
     return render(request, 'users/home.html', context)
