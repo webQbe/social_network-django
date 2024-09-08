@@ -32,12 +32,11 @@
                 <!-- user details -->
                 <div class="row">
                     <div class="col-sm-2">
-                        <p><img src="{{ post.user.userprofile.user_image.url }}" class="img-circle" width="100px" height="100px"></p>
+                        <a style="text-decoration:none; cursor:pointer; color:#3897f0; " href="{% url 'profile' post.user.id %}">
+                        <p><img src="{{ post.user.userprofile.user_image.url }}" class="img-circle" width="50px" height="50px"></p>
                     </div>
                     <div class="col-sm-6">
-                        <h3><a style="text-decoration:none; cursor:pointer; color:#3897f0; " href="{% url 'profile' post.user.id %}">
-                            {{ post.user.username }}
-                            </a></h3>
+                        <b>{{ post.user.username }}</a></b>
                         <h4><small style="color:black;">Updated a post on <strong>{{ post.post_date }}</strong></small></h4>
                     </div>
                     <div class="col-sm-4">
@@ -46,22 +45,22 @@
                 <!-- post details -->
                 <div class="row">
                     <div class="col-sm-12">
-                        <!--if a post only has an image-->
-                        {% if post.upload_image %}
-                        <img id="posts-img" src="{{ post.upload_image.url }}" style="height:350px;">
+                        <!-- If a post has both an image and content -->
+                        {% if post.post_content and post.upload_image %}
+                            <p>{{ post.post_content }}</p>
+                            <img id="posts-img" src="{{ post.upload_image.url }}" style="height:230x; padding: 5px 10px; min-width: 102%; max-width: 50%;">
                         
-                        <!--if a post has an image and content -->
-                        {% elif post.post_content and post.upload_image %}
-                        <p>{{ post.post_content }}</p>
-                        <img id="posts-img" src="{{ post.upload_image.url }}" style="height:350px;">
+                        <!-- If a post only has an image -->
+                        {% elif post.upload_image %}
+                            <img id="posts-img" src="{{ post.upload_image.url }}" style="height:230px; padding: 5px 10px; min-width: 102%; max-width: 50%;">
                     
-                        <!--if a post is text only-->
+                         <!-- If a post is text only -->
                         {% elif post.post_content %}
-                        <p>{{ post.post_content }}</p>
+                            <h1>{{ post.post_content }}</h1>
                         {% endif %}
                     </div>
                 </div><br>
-                <a href="{% url 'post_detail' post.post_id %}" style="float:right;"><button class="btn btn-info">Comment</button></a><br>
+                <a href="#" style="float:right;"><button class="btn btn-info">Comment</button></a><br>
             </div>
             <div class="col-sm-3"></div>
         </div><br><br>

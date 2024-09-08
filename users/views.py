@@ -21,7 +21,11 @@ from django.core.paginator import Paginator
 def home_view(request):
     user_profile = get_object_or_404(UserProfile, user=request.user)
 
+    # fetch all posts
+    posts = Post.objects.all().order_by('-post_date')
+
     context = {
+        'posts':posts,
         'user_profile':user_profile,
     }
     return render(request, 'users/home.html', context)
@@ -182,30 +186,8 @@ def create_post_view(request):
     
     # If it's not a POST request, render the form
     return render(request, 'users/home.html', {'form':PostForm()})
-
-
-@login_required
-def get_posts_view(request):
-    per_page = 4 # posts per page
-
-    # fetch posts ordered by post_date descending
-    posts = Post.objects.all().order_by('-post_date')
-
-    # pagination
-    paginator = Paginator(posts, per_page)
-    page_number = request.GET.get('page', 1)
-    page_obj = paginator.get_page(page_number)
-
-    context = {
-        'posts':page_obj, # paginated posts
-    }
-
-    return render(request, 'home', context)
-               
-               
-           
-
-
+              
+        
 @login_required
 def logout_view(request):
     logout(request)

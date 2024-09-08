@@ -7,7 +7,6 @@ from django.conf.urls.static import static
 from django.conf.urls import handler403
 
 urlpatterns = [
-    path('posts', views.get_posts_view, name="posts"),  
     path('post/new/', views.create_post_view, name="create_post"), 
     path('update_profile/<int:user_id>/', views.updateProfileImage_view , name="update_image"),
     path('update_cover/<int:user_id>/', views.updateCover_view, name="update_cover"),

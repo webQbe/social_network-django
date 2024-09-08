@@ -42,12 +42,7 @@ input[type="file"]{
     padding: 40px 50px;
 }
 
-#post-img{
-    padding-top: 5px;
-    padding-right: 10px;
-    min-width: 102%;
-    max-width: 50%;
-}
+
 
 #single-posts{
     border: 5px solid #e6e6e6;
