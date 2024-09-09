@@ -7,6 +7,7 @@ from django.conf.urls.static import static
 from django.conf.urls import handler403
 
 urlpatterns = [
+    path('post/<int:post_id>/edit', views.edit_post_view, name='post_edit'),
     path('post/<int:post_id>/delete/', views.post_delete_profile, name='p_post_delete'),  
     path('post/<int:post_id>/delete/', views.post_delete_home, name='h_post_delete'), 
     path('post/new/', views.create_post_view, name="create_post"), 

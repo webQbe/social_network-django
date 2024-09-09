@@ -213,6 +213,23 @@ def post_delete_profile(request, post_id):
     post.delete()
     return redirect('profile', user_id=request.user.id)
 
+@login_required
+def edit_post_view(request, post_id):
+    post = get_object_or_404(Post, post_id=post_id, user=request.user)
+
+    if request.method == 'POST':
+        content = request.POST.get('post_content')
+        post.post_content = content
+        post.save()
+
+        messages.success(request, 'Post has been updated successfully!')
+        return redirect('profile', user_id=request.user.id)
+    
+    context = {
+        'post':post,
+    }
+    return render(request, 'users/edit_post.html', context)
+
 
 @login_required
 def logout_view(request):

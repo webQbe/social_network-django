@@ -83,6 +83,15 @@
         <p><strong>Date of birth: </strong>{{ user_profile.user_birthday }}</p><br>
     </div>
     <div class="col-sm-8" style="margin: 1% 1% 1% 5%; ">
+        <center>
+            {% if messages %}
+                <div class="alert alert-success">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </center>
         <!-- display user posts -->
         {% for post in posts %}
         <div class="row">
@@ -123,7 +132,7 @@
                 <a href="#" style="float:left;"><button class="btn btn-success">View</button></a>
                 <a href="#" style="float:left;"><button class="btn btn-info">Comment</button></a>
                 {% if post.user == logged_in_user %}
-                    <a href="#" style="float:left;"><button class="btn btn-success">Edit</button></a>
+                    <a href="{% url 'post_edit' post.post_id %}" style="float:left;"><button class="btn btn-success">Edit</button></a>
                     <a href="{% url 'p_post_delete' post.post_id %}" style="float:left;"><button class="btn btn-danger">Delete</button></a>
                 {% endif %}
             </div>

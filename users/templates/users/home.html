@@ -1,6 +1,15 @@
 {% extends 'users/navbar.html' %}
 {% block title %}{{ user.first_name }} {{ user.last_name }}{% endblock %}
 {% block content %}
+<center>
+    {% if messages %}
+        <div class="alert alert-success">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</center>
 <div class="row">
     <div id="insert_post" class="col-sm-12">
         <center>
@@ -63,7 +72,7 @@
                 <a href="#" style="float:left;"><button class="btn btn-success">View</button></a>
                 <a href="#" style="float:left;"><button class="btn btn-info">Comment</button></a>
                 {% if post.user == logged_in_user %}
-                    <a href="#" style="float:left;"><button class="btn btn-success">Edit</button></a>
+                    <a href="{% url 'post_edit' post.post_id %}" style="float:left;"><button class="btn btn-success">Edit</button></a>
                     <a href="{% url 'h_post_delete' post.post_id %}" style="float:left;"><button class="btn btn-danger">Delete</button></a>
                 {% endif %}
             </div>

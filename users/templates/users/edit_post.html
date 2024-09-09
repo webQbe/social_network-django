@@ -1,0 +1,23 @@
+{% extends 'users/navbar.html' %}
+{% block title %}
+    Edit your post:
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-3">
+    </div>
+    <div class="col-sm-6">
+        <form action="" method="POST" id="f">
+            {% csrf_token %}
+            <center><h2>Edit your post:</h2></center><br>
+            <textarea class="form-control" cols="83" rows="4" name="post_content">
+                {{ post.post_content }}
+            </textarea><br>
+            <input type="submit" name="update" value="Update post" class="btn btn-info" />
+        </form>
+    </div>
+    <div class="col-sm-3">
+    </div>
+</div>
+{% endblock %}
