@@ -35,6 +35,7 @@ def home_view(request):
     context = {
         'posts':page,
         'user_profile':user_profile,
+        'logged_in_user': request.user, 
     }
     return render(request, 'users/home.html', context)
 
@@ -50,6 +51,7 @@ def profile_view(request, user_id):
         'user': user,
         'user_profile': user_profile,
         'posts': posts,
+        'logged_in_user': request.user, 
     }
 
     return render(request, 'users/profile.html', context)

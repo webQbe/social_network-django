@@ -5,8 +5,8 @@
 
 {% block content %}
 <div class="row">
-    <div class="col-sm-2"></div>
-    <div class="col-sm-8">
+    <div class="col-sm-1"></div>
+    <div class="col-sm-14">
         <div>
             <!-- Display the cover image -->
             <div>
@@ -16,7 +16,7 @@
             <!-- Form to update the cover image -->
             <form action="{% url 'update_cover' user.id %}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-                <ul class="nav pull-left" style="position:absolute; top:10px; left:40px;">
+                <ul class="nav pull-left" style="position:absolute; top:80px; left:40px;">
                     <li class="dropdown">
                         <button class="dropdown-toggle btn btn-default" data-toggle="dropdown">Change Cover</button>
                         <div class="dropdown-menu">
@@ -68,13 +68,11 @@
             </form>
         </div><br>
     </div>
-    <div class="col-sm-2">
+    <div class="col-sm-1">
     </div>
 </div>
 <div class="row">
-    <div class="col-sm-2">
-    </div>
-    <div class="col-sm-2" style="background-color: #e6e6e6;text-align: center; left: 0.9%; border-radius: 5px;">
+    <div class="col-sm-2" style="background-color: #e6e6e6;text-align: center; left: 0.1%; padding: 1%; border-radius: 5px;">
         <center><h2><strong>About</strong></h2></center>
         <center><h4><strong>{{ user.first_name }} {{ user.last_name }}</strong></h4></center>
         <p><strong><i style="color:gray;">{{ user_profile.describe_user }}</i></strong></p><br>
@@ -84,13 +82,13 @@
         <p><strong>Gender: </strong>{{ user_profile.user_gender }}</p><br>
         <p><strong>Date of birth: </strong>{{ user_profile.user_birthday }}</p><br>
     </div>
-    <div class="col-sm-8">
+    <div class="col-sm-8" style="margin: 1% 1% 1% 5%; ">
         <!-- display user posts -->
         {% for post in posts %}
         <div class="row">
             <div class="col-sm-4">
             </div>
-            <div id="profile-posts" class="col-sm-9">
+            <div id="own_posts" class="col-sm-9">
                 <!-- user details -->
                 <div class="row">
                     <div class="col-sm-2">
@@ -110,11 +108,11 @@
                         <!-- If a post has both an image and content -->
                         {% if post.post_content and post.upload_image %}
                             <p>{{ post.post_content }}</p>
-                            <img id="posts-img" src="{{ post.upload_image.url }}" style="height:230x; padding: 5px 10px; min-width: 102%; max-width: 50%;">
+                            <img id="post_img" src="{{ post.upload_image.url }}" style="height:230x; padding: 5px 10px; min-width: 102%; max-width: 50%;">
                         
                         <!-- If a post only has an image -->
                         {% elif post.upload_image %}
-                            <img id="posts-img" src="{{ post.upload_image.url }}" style="height:230px; padding: 5px 10px; min-width: 102%; max-width: 50%;">
+                            <img id="post_img" src="{{ post.upload_image.url }}" style="height:230px; padding: 5px 10px; min-width: 102%; max-width: 50%;">
                     
                          <!-- If a post is text only -->
                         {% elif post.post_content %}
@@ -122,9 +120,12 @@
                         {% endif %}
                     </div>
                 </div><br>
-                <a href="#" style="float:right;"><button class="btn btn-success">View</button></a><br>
-                <a href="#" style="float:right;"><button class="btn btn-info">Comment</button></a><br>
-                <a href="#" style="float:right;"><button class="btn btn-danger">Delete</button></a>
+                <a href="#" style="float:left;"><button class="btn btn-success">View</button></a>
+                <a href="#" style="float:left;"><button class="btn btn-info">Comment</button></a>
+                {% if post.user == logged_in_user %}
+                    <a href="#" style="float:left;"><button class="btn btn-success">Edit</button></a>
+                    <a href="#" style="float:left;"><button class="btn btn-danger">Delete</button></a>
+                {% endif %}
             </div>
             <div class="col-sm-2"></div>
         </div><br><br>
@@ -132,6 +133,9 @@
     </div>
 </div>
 {% endblock %}
+
+
+
 
 
 
