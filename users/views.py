@@ -43,10 +43,13 @@ def home_view(request):
 def profile_view(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     user_profile = get_object_or_404(UserProfile, user=user)
+    # latest 5 posts
+    posts = Post.objects.filter(user=user).order_by('-post_date')[:5]
 
     context = {
         'user': user,
         'user_profile': user_profile,
+        'posts': posts,
     }
 
     return render(request, 'users/profile.html', context)
