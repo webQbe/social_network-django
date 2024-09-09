@@ -64,7 +64,7 @@
                 <a href="#" style="float:left;"><button class="btn btn-info">Comment</button></a>
                 {% if post.user == logged_in_user %}
                     <a href="#" style="float:left;"><button class="btn btn-success">Edit</button></a>
-                    <a href="#" style="float:left;"><button class="btn btn-danger">Delete</button></a>
+                    <a href="{% url 'h_post_delete' post.post_id %}" style="float:left;"><button class="btn btn-danger">Delete</button></a>
                 {% endif %}
             </div>
             <div class="col-sm-3"></div>

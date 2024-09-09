@@ -200,7 +200,20 @@ def create_post_view(request):
     # If it's not a POST request, render the form
     return render(request, 'users/home.html', {'form':PostForm()})
               
-        
+
+@login_required
+def post_delete_home(request, post_id):
+    post = get_object_or_404(Post, post_id=post_id, user=request.user)
+    post.delete()
+    return redirect('home')
+
+@login_required
+def post_delete_profile(request, post_id):
+    post = get_object_or_404(Post, post_id=post_id, user=request.user)
+    post.delete()
+    return redirect('profile', user_id=request.user.id)
+
+
 @login_required
 def logout_view(request):
     logout(request)
