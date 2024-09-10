@@ -1,6 +1,6 @@
 from django import forms
 from main.models import UserProfile
-from .models import Post
+from .models import Post, Comment
 
 class CoverUpdateForm(forms.ModelForm):
     class Meta:
@@ -43,3 +43,7 @@ class PostForm(forms.ModelForm):
         return p_image
     
 
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['comment']

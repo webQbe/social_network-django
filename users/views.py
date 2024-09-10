@@ -5,8 +5,8 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.views import View
 from main.models import UserProfile
-from .models import Post
-from .forms import CoverUpdateForm, ProfilePicUpdateForm, PostForm
+from .models import Post, Comment
+from .forms import CoverUpdateForm, ProfilePicUpdateForm, PostForm, CommentForm
 from django.http import HttpResponse
 from django.utils.crypto import get_random_string
 import os
@@ -177,19 +177,27 @@ def create_post_view(request):
            # Save both content and image
            post = Post(user=request.user, post_content=content, upload_image=image_path)
            post.save()
-           # Optionally update the user's post status
+           # update the user's post status
            request.user.userprofile.posts = "Yes"
            request.user.userprofile.save()
+         
 
        elif content == '' and upload_image:
            # Only image is provided, save the image
            post = Post(user=request.user, upload_image=image_path)
            post.save()
+           # update the user's post status
+           request.user.userprofile.posts = "Yes"
+           request.user.userprofile.save()
+
 
        elif content:
            # Only content is provided, no image
            post = Post(user=request.user, post_content=content)
            post.save()
+           # update the user's post status
+           request.user.userprofile.posts = "Yes"
+           request.user.userprofile.save()
 
        else:
            return redirect('home')
@@ -230,6 +238,57 @@ def edit_post_view(request, post_id):
     }
     return render(request, 'users/edit_post.html', context)
 
+@login_required
+def single_post_view(request, post_id):
+    post = get_object_or_404(Post, pk=post_id)
+    user_profile = get_object_or_404(UserProfile, user=request.user)
+
+    context = {
+        'post':post,
+        'form':CommentForm(),
+        'comments': Comment.objects.filter(post=post).order_by('-date'),
+        'user_profile':user_profile,
+    }
+
+    return render(request, 'users/single_post.html', context)
+
+
+@login_required
+def comment_post_view(request, post_id):
+    post = get_object_or_404(Post, pk=post_id)
+
+    if request.method == 'POST':
+       comment_text = request.POST.get('comment', '').strip()
+
+       # Validate content length
+       if len(comment_text) > 250:
+           return render(request, 'users/single_post.html', {
+               'form': CommentForm(),
+                'error': "Please use 250 or fewer characters!",
+                'post': post,
+                'comments': Comment.objects.filter(post=post).order_by('-date')
+                })
+       
+       # Save the comment
+       comment = Comment.objects.create(
+            post=post,
+            user=request.user,
+            comment=comment_text,
+            comment_author=request.user.username
+        )
+       
+       # Redirect after saving the post
+       return redirect('single_post', post_id=post_id)
+    
+    context = {
+            'post' : post,
+            'form' : CommentForm,
+            'comment':Comment.objects.filter(post=post).order_by('-date'),
+        }
+    
+    return render(request, 'users/single_post.html', context)
+    
+  
 
 @login_required
 def logout_view(request):

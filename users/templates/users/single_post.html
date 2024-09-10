@@ -1,0 +1,48 @@
+{% extends 'users/navbar.html' %}
+{% block title %}
+    View {{ post.user.username }}'s post:
+{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <!-- Display the post content -->
+             <b>{{ post.user.username }}'s post</b>
+             <p><small>Posted on: {{ post.post_date }} </small></p>
+             <hr>
+
+             {% if post.post_content %}
+                <h2> {{post.post_content }} </h2>
+             {% endif %}
+
+             {% if post.upload_image %}
+                <img src="{{ post.upload_image.url }}" alt="Post Image" style="max-width: 100%;">
+             {% endif %}
+             <hr>
+
+              <!-- Display the comments -->
+              <h3>Comments:</h3>
+              {% for comment in comments %}
+                <div class="panel panel-info">
+                    <div class="panel-body">    
+                        <p><strong> {{ comment.comment_author }} </strong><i> commented</i> on {{ comment.date }}</p>
+                        <p class="text-primary" style="margin-left: 5px; font-size: 14px;"> {{ comment.comment }} </p>
+                    </div>
+                </div>
+              {% empty %}
+                <p>No comments yet.</p>
+              {% endfor %}   
+              
+            <!-- Comment form -->
+                <form action="{% url 'comment_post' post.post_id %}" method="post">
+                    {% csrf_token %}
+                    <textarea class="form-control" rows="4" id="content" name="comment" placeholder="Write your comment!"></textarea><br>
+                    <button id="btn-post" class="btn btn-info" name="sub">Comment</button>
+                </form>
+             <hr>
+
+        </div>
+    </div>
+
+{% endblock %}
