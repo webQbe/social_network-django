@@ -1,0 +1,52 @@
+{% extends 'users/navbar.html' %}
+{% load static %}
+{% block title %}
+    Find People
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-12">
+            <center><h2>Find New People</h2></center><br><br>
+            <div class="row">
+                <div class="col-sm-4">
+                </div>
+                <div class="col-sm-4">
+                    <form method="GET" action="{% url 'find_people' %}" class="search_form">
+                        <input type="text" placeholder="Search Friend" name="search_user" value="{{search_query}}">
+                        <button class="btn btn-info" type="submit" name="search_user_btn">Search</button>
+                    </form>
+                </div>
+                <div class="col-sm-4">
+                </div>
+        </div><br><br>
+        <!-- Display search results -->
+            {% for user in users %}
+                    <div class="row">
+                        <div class="col-sm-3">
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row" id="find_people">
+                                <div class="col-sm-4">
+                                    <a href="{% url 'profile' user.id %}">
+                                            <img src="{% if user.userprofile %}{{ user.userprofile.user_image.url }}{% else %}{% static 'default_profile.png' %}{% endif %}" width="150px" height="140px" alt="{{ user.username }}" title="{{ user.username }}" style="float: left; margin: 1px;">
+                                    </a>
+                                </div><br><br>
+                                <div class="col-sm-6">
+                                    <a href="{% url 'profile' user.id %}" style="text-decoration: None; cursor: pointer; color: #3897F0;">
+                                    <strong><h2> {{ user.first_name }} {{ user.last_name }} </h2></strong>
+                                    </a>
+                                </div>
+                                <div class="col-sm-3">  
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                        </div>
+                </div><br>
+            {% endfor %}
+    </div>
+{% endblock %}
+
+
+

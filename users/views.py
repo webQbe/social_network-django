@@ -13,6 +13,7 @@ import os
 from django.middleware.csrf import CsrfViewMiddleware
 from django.core.files.storage import default_storage
 from django.core.paginator import Paginator
+from django.views.decorators.cache import never_cache
 
 
 # Create your views here.
@@ -289,8 +290,7 @@ def comment_post_view(request, post_id):
         }
     
     return render(request, 'users/single_post.html', context)
-    
-  
+
 
 @login_required
 def logout_view(request):
@@ -298,8 +298,35 @@ def logout_view(request):
     return redirect('main_page')
 
 @login_required(login_url='/')
-def find_view(request):
-    return render(request, 'users/find_people.html')
+@never_cache
+def find_people_view(request):
+    search_query = request.GET.get('search_user', '')
+    user_profile = get_object_or_404(UserProfile, user=request.user)
+
+    if search_query:
+        # Search for users whose first name, last name, or username contains the search query
+        users = User.objects.filter(
+            first_name__icontains=search_query
+        ) | User.objects.filter(
+            last_name__icontains=search_query
+        ) | User.objects.filter(
+            username__icontains=search_query
+        )
+
+    elif search_query == "":
+        users = User.objects.all()
+    
+    else:
+        # If no search term is provided, retrieve all users
+        users = User.objects.all()
+
+    context = {
+        'users' : users,
+        'search_query' : search_query,
+        'user_profile': user_profile,
+    }
+
+    return render(request, 'users/members.html', context)
 
 @login_required(login_url='/')
 def message_view(request):
