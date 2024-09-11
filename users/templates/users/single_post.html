@@ -4,9 +4,17 @@
 {% endblock %}
 
 {% block content %}
-
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
+            <center>
+                {% if messages %}
+                    <div class="alert alert-danger">
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </center>
             <!-- Display the post content -->
              <b>{{ post.user.username }}'s post</b>
              <p><small>Posted on: {{ post.post_date }} </small></p>
@@ -35,11 +43,15 @@
               {% endfor %}   
               
             <!-- Comment form -->
-                <form action="{% url 'comment_post' post.post_id %}" method="post">
+            <div class="panel panel-info">
+                <div class="panel-body">   
+                <form action="{% url 'comment_post' post.post_id %}" method="post" class="form-inline">
                     {% csrf_token %}
-                    <textarea class="form-control" rows="4" id="content" name="comment" placeholder="Write your comment!"></textarea><br>
-                    <button id="btn-post" class="btn btn-info" name="sub">Comment</button>
+                    <textarea class="pb-cmnt-textarea" rows="4" style="width: 100%;" name="comment" placeholder="Write your comment!"></textarea><br>
+                    <button id="btn-post" class="btn btn-info" name="sub" style="margin: 1% 0% 0% 75%;">Comment</button>
                 </form>
+                </div>
+            </div>
              <hr>
 
         </div>

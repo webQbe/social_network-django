@@ -256,26 +256,27 @@ def single_post_view(request, post_id):
 @login_required
 def comment_post_view(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
+    user_profile = get_object_or_404(UserProfile, user=request.user)
 
     if request.method == 'POST':
        comment_text = request.POST.get('comment', '').strip()
 
+       if not comment_text:
+           messages.error(request, "Please write something!")
+           return redirect('single_post', post_id=post_id)
+       
        # Validate content length
        if len(comment_text) > 250:
-           return render(request, 'users/single_post.html', {
-               'form': CommentForm(),
-                'error': "Please use 250 or fewer characters!",
-                'post': post,
-                'comments': Comment.objects.filter(post=post).order_by('-date')
-                })
+           messages.error(request, "Please use 250 or fewer characters!")
+           return redirect('single_post', post_id=post_id)
        
        # Save the comment
-       comment = Comment.objects.create(
-            post=post,
-            user=request.user,
-            comment=comment_text,
-            comment_author=request.user.username
-        )
+       Comment.objects.create(
+                post=post,
+                user=request.user,
+                comment=comment_text,
+                comment_author=request.user.username
+            )
        
        # Redirect after saving the post
        return redirect('single_post', post_id=post_id)
@@ -284,6 +285,7 @@ def comment_post_view(request, post_id):
             'post' : post,
             'form' : CommentForm,
             'comment':Comment.objects.filter(post=post).order_by('-date'),
+            'user_profile': user_profile,
         }
     
     return render(request, 'users/single_post.html', context)

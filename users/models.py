@@ -19,7 +19,7 @@ class Comment(models.Model):
     # Primary key com_id will be auto-created as id field by default
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    comment = models.TextField(max_length=255)
+    comment = models.TextField(blank=False, max_length=255)
     comment_author = models.CharField(max_length=255)
     date = models.DateTimeField(auto_now_add=True)
 
