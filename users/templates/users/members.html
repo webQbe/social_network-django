@@ -12,10 +12,10 @@
                 <div class="col-sm-4">
                 </div>
                 <div class="col-sm-4">
-                    <form method="GET" action="{% url 'find_people' %}" class="search_form">
-                        <input type="text" placeholder="Search Friend" name="search_user" value="{{search_query}}">
-                        <button class="btn btn-info" type="submit" name="search_user_btn">Search</button>
-                    </form>
+                        <form method="GET" action="{% url 'find_people' %}" class="search_form">
+                            <input type="text" placeholder="Search Friend" name="search_user" value="{{search_query}}">
+                            <button class="btn btn-info" type="submit" name="search_user_btn">Search</button>
+                        </form>
                 </div>
                 <div class="col-sm-4">
                 </div>
@@ -32,9 +32,9 @@
                                             <img src="{% if user.userprofile %}{{ user.userprofile.user_image.url }}{% else %}{% static 'default_profile.png' %}{% endif %}" width="150px" height="140px" alt="{{ user.username }}" title="{{ user.username }}" style="float: left; margin: 1px;">
                                     </a>
                                 </div><br><br>
-                                <div class="col-sm-6">
+                                <div class="col-sm-6" style="margin-left: 1%;">
                                     <a href="{% url 'profile' user.id %}" style="text-decoration: None; cursor: pointer; color: #3897F0;">
-                                    <strong><h2> {{ user.first_name }} {{ user.last_name }} </h2></strong>
+                                    <strong><h3>{{ user.first_name }} {{ user.last_name }}</h3></strong>
                                     </a>
                                 </div>
                                 <div class="col-sm-3">  
