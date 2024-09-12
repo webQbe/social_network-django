@@ -328,6 +328,26 @@ def find_people_view(request):
 
     return render(request, 'users/members.html', context)
 
+@login_required
+def user_profile_view(request, user_id):
+    # get user by id
+    user_profile = get_object_or_404(UserProfile, user_id=user_id)
+
+    # get currently logged in user
+    logged_in_user = request.user
+
+    # when user is viewing his own profile
+    is_own_profile = (logged_in_user.id == user_id)
+
+    context = {
+        'user_profile' : user_profile,
+        'is_own_profile' : is_own_profile,
+    }
+
+    return render(request, 'users/user_profile.html', context)
+
+
+
 @login_required(login_url='/')
 def message_view(request):
     return render(request, 'users/message.html')

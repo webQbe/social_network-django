@@ -1,0 +1,42 @@
+{% extends 'users/navbar.html' %}
+{% load static %}
+{% block title %}
+    {{ user_profile.user.username }}'s profile
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-sm-12">
+         <div class="row">
+            <div class="col-sm-1">
+            </div>
+                <center>
+                    <div style="background-color: #e6e6e6;" class="col-sm-3">
+                            <h4>{{ user_profile.user.username }} </h4>
+                            <img class="img-circle" src="{% if user_profile.user_image %}{{ user_profile.user_image.url }}{% else %}{% static 'default_profile.png' %}{% endif %}" width="150px" height="150px">
+                            <br><br>
+                            <ul class="list-group">
+                                <li class="list-group-item" title="Username"><strong>{{user_profile.user.first_name}} {{user_profile.user.last_name}}</strong></li>
+    
+                                <li class="list-group-item" title="User status"><strong style="color: gray;">{{user_profile.describe_user}}</strong></li>
+    
+                                <li class="list-group-item" title="Gender"><strong>{{user_profile.user_gender}}</strong></li>
+    
+                                <li class="list-group-item" title="Country"><strong>{{user_profile.user_country}}</strong></li>
+    
+                                <li class="list-group-item" title="User Registration Date"><strong>{{user_profile.user_reg_date}}</strong></li>
+                            </ul>
+
+                        {% if is_own_profile %}
+                            <a href="#" class="btn btn-success">Edit Profile</a>
+                        {% else %}
+                            <a href="#" class="btn btn-success">Follow</a>
+                        {% endif %}
+                        <br><br><br>
+                    </div>
+            </center>
+        </div>
+    </div>
+{% endblock %}
+
+
+
