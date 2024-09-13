@@ -332,6 +332,10 @@ def find_people_view(request):
 def user_profile_view(request, user_id):
     # get user by id
     user_profile = get_object_or_404(UserProfile, user_id=user_id)
+    user = get_object_or_404(User, pk=user_id)
+
+    # latest 5 posts
+    posts = Post.objects.filter(user=user).order_by('-post_date')[:5]
 
     # get currently logged in user
     logged_in_user = request.user
@@ -340,6 +344,8 @@ def user_profile_view(request, user_id):
     is_own_profile = (logged_in_user.id == user_id)
 
     context = {
+        'user': user,
+        'posts': posts,
         'user_profile' : user_profile,
         'is_own_profile' : is_own_profile,
     }

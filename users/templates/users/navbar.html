@@ -53,9 +53,10 @@
     #own_posts{
         border:5px solid #e6e6e6;
         padding: 40px 50px;
+        width: 90%;
     }
 
-    #post_img{
+    #posts_img{
         height: 300px;
         width: 100%;   
     }
@@ -132,7 +133,7 @@
                 <ul class="nav navbar-nav">
                     {% if user.is_authenticated %}
                         {% with user.profile as profile %}
-                        <li><a href="{% url 'profile' user.id %}">{{ user.first_name }}</a></li>
+                        <li><a href="{% url 'profile' request.user.id %}">{{ request.user.first_name }}</a></li>
                         {% endwith %}
                         <li><a href="{% url 'home' %}">Home</a></li>
                         <li><a href="{% url 'find_people' %}">Find People</a></li>
@@ -142,8 +143,8 @@
                                 <span><i class="glyphicon glyphicon-chevron-down"></i></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a href="#">My Posts <span class="badge badge-secondary"> {{ user_profile.posts }} </span> </a></li>
-                                <li><a href="#">Edit Account</a></li>
+                                <li><a href="#">My Posts <span class="badge badge-secondary"> {{ request.user.userprofile.posts }} </span> </a></li>
+                                <li><a href="#">Edit Account</a></li
                                 <li role="separator" class="divider"></li>
                                 <li><a href="{% url 'logout' %}">Logout</a></li>
                             </ul>
