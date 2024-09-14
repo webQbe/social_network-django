@@ -22,7 +22,7 @@
                 <div id="loaded_msg">
                     <p>
                         {% for msg in messages %}
-                            <div class="message" id="{% if msg.user_from == request.user %}blue{% else %}green{% endif %}" data-toggle="tooltip" title="{{ msg.date }}">{{ msg.msg_body }} <small> {{ msg.date }} </small></div><br><br><br>
+                            <div class="message" id="{% if msg.user_from == request.user %}blue{% else %}green{% endif %}" data-toggle="tooltip" title="{{ msg.date }}">{{ msg.msg_body }}</div><br><br><br>
                         {% empty %}
                             <p>Start a chat!</p>
                         {% endfor %}
@@ -73,6 +73,10 @@
             {% endif %}
         </div>
     </div>
+    <script>
+        var div = document.getElementById("scroll_messages");
+        div.scrollTop = div.scrollHeight;
+    </script>
 {% endblock %}
 
 
