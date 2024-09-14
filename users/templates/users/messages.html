@@ -10,7 +10,7 @@
         <div class="col-sm-3" id="select_user" style="width: 25%;">
             {% for user in all_users %}
                     <div class="container-fluid">
-                        <a style="text-decoration: none; cursor: pointer; color: #3897F0;" href="{% url 'messages' user.id %}">
+                        <a style="text-decoration: none; cursor: pointer; color: #3897F0;" href="{% if user.userprofile %}{% url 'messages' user.id %}{% else %}{% url 'messages' request.user.id %}{% endif %}">
                             <img class="img-circle" src="{% if user.userprofile %}{{ user.userprofile.user_image.url }}{% else %}{% static 'default_profile.png' %}{% endif %}" width="50px" height="55px" title="{{ user.username }}"><strong>&nbsp;{{ user.first_name }} {{ user.last_name }}</strong><br><br>
                         </a>
                     </div>
