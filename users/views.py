@@ -367,8 +367,10 @@ def messages_view(request, u_id=None):
     # get receiver
     if u_id:
         receiver = get_object_or_404(User, id=u_id)
+        receiver_profile = get_object_or_404(UserProfile, user=receiver)
     else:
         receiver = None
+        receiver_profile = None
 
     # fetch conversation
     if receiver:
@@ -401,6 +403,7 @@ def messages_view(request, u_id=None):
         'user_to_msg' : receiver,
         'error' : error,
         'user_profile' : user_profile,
+        'receiver_profile' : receiver_profile,
     }
 
     return render(request, 'users/messages.html', context)

@@ -7,11 +7,11 @@
 {% block content %}
     <div class="row">   
         <!-- select a user to send a message -->
-        <div class="col-sm-4" id="select_user">
+        <div class="col-sm-3" id="select_user" style="width: 25%;">
             {% for user in all_users %}
                     <div class="container-fluid">
                         <a style="text-decoration: none; cursor: pointer; color: #3897F0;" href="{% url 'messages' user.id %}">
-                            <img class="img-circle" src="{% if user.userprofile %}{{ user.userprofile.user_image.url }}{% else %}{% static 'default_profile.png' %}{% endif %}" width="85px" height="90px" title="{{ user.username }}"><strong>&nbsp;{{ user.first_name }} {{ user.last_name }}</strong><br><br>
+                            <img class="img-circle" src="{% if user.userprofile %}{{ user.userprofile.user_image.url }}{% else %}{% static 'default_profile.png' %}{% endif %}" width="50px" height="55px" title="{{ user.username }}"><strong>&nbsp;{{ user.first_name }} {{ user.last_name }}</strong><br><br>
                         </a>
                     </div>
             {% endfor %}
@@ -43,8 +43,39 @@
                 <p>Select a user to start a conversation.</p>
              {% endif %}         
         </div>
+        <!-- display user info -->
+        <div class="col-sm-3">
+            {% if user_to_msg %}
+             <div class="row">
+                            <div class="col-sm-2">
+                            </div>
+                            <center>
+                                <div style="background-color: #e6e6e6;" class="col-sm-9">
+                                    <h2>Information About</h2>
+                                    <img class="img-circle" src="{% if user.userprofile %}{{ receiver_profile.user_image.url }}{% else %}{% static 'default_profile.png' %}{% endif %}" width="150px" height="150px">
+                                    <br><br>
+                                    <ul class="list-group">
+                                        <li class="list-group-item" title="Fullname">
+                                            <strong>{{ receiver_profile.user.first_name }} {{ receiver_profile.user.last_name }} </strong>
+                                        </li> 
+                                        <li class="list-group-item" title="Description">
+                                            <strong style="color: gray;">{{ receiver_profile.describe_user }}</strong>
+                                        </li>  
+                                        <li class="list-group-item" title="Gender">{{ receiver_profile.user_gender }}</li>
+                                        <li class="list-group-item" title="Country">{{ receiver_profile.user_country }}</li>
+                                        <li class="list-group-item" title="Joined on">{{ receiver_profile.user_reg_date }}</li>
+                                    </ul>
+                                </div>  
+                                <div class="col-sm-1">
+                                </div>
+                            </center>
+             </div>
+            {% endif %}
+        </div>
     </div>
 {% endblock %}
+
+
 
 
 
