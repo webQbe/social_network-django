@@ -27,3 +27,15 @@ class Comment(models.Model):
         # Ensure comment is not None
         comment_preview = self.comment[:20] if self.comment else ""
         return f'{self.comment_author} - {comment_preview}'
+
+
+class Message(models.Model):
+    message_id = models.AutoField(primary_key=True)
+    user_to = models.ForeignKey(User, related_name='messages_received', on_delete=models.CASCADE)
+    user_from = models.ForeignKey(User, related_name='messages_sent', on_delete=models.CASCADE)
+    msg_body = models.CharField(max_length=200)
+    date = models.DateTimeField(default=timezone.now)
+    msg_seen = models.CharField(max_length=10)
+
+    def __str__(self):
+        return f'Message from {self.user_from} to {self.user_to}'
