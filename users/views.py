@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.views import View
 from main.models import UserProfile
-from .models import Post, Comment
+from .models import Post, Comment, Message
 from .forms import CoverUpdateForm, ProfilePicUpdateForm, PostForm, CommentForm
 from django.http import HttpResponse
 from django.utils.crypto import get_random_string
@@ -14,6 +14,8 @@ from django.middleware.csrf import CsrfViewMiddleware
 from django.core.files.storage import default_storage
 from django.core.paginator import Paginator
 from django.views.decorators.cache import never_cache
+from django.db import models
+
 
 
 # Create your views here.
@@ -354,9 +356,54 @@ def user_profile_view(request, user_id):
 
 
 
-@login_required(login_url='/')
-def message_view(request):
-    return render(request, 'users/message.html')
+@login_required
+def messages_view(request, u_id=None):
+    # get all users except logged in user
+    users = User.objects.exclude(id=request.user.id)
+
+    # get logged in user
+    sender = request.user
+
+    # get receiver
+    if u_id:
+        receiver = get_object_or_404(User, id=u_id)
+    else:
+        receiver = None
+
+    # fetch conversation
+    if receiver:
+        messages = Message.objects.filter(
+            (models.Q(user_to=receiver) & models.Q(user_from=sender)) |
+            (models.Q(user_from=receiver) & models.Q(user_to=sender))
+        ).order_by('date')
+    else:
+        messages = []
+
+    # Initialize error as None
+    error = None
+
+    # sending message
+    if request.method == 'POST':
+        msg_text = request.POST.get('msg_box')
+
+        if not msg_text:
+            error = "Message was unable to send!"
+        elif len(msg_text) > 37:
+            error = "Message is too long! Use only 37 characters."
+        else:
+            Message.objects.create(user_to=receiver, user_from=sender, msg_body=msg_text)
+        
+    user_profile = get_object_or_404(UserProfile, user=request.user)
+
+    context = {
+        'all_users': users,
+        'messages' : messages,
+        'user_to_msg' : receiver,
+        'error' : error,
+        'user_profile' : user_profile,
+    }
+
+    return render(request, 'users/messages.html', context)
 
 @login_required(login_url='/')
 def myPosts_view(request, user_id):

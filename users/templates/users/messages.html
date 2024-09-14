@@ -1,0 +1,50 @@
+{% extends 'users/navbar.html' %}
+{% load static %}
+{% block title %}
+    Messages
+{% endblock %}
+
+{% block content %}
+    <div class="row">   
+        <!-- select a user to send a message -->
+        <div class="col-sm-4" id="select_user">
+            {% for user in all_users %}
+                    <div class="container-fluid">
+                        <a style="text-decoration: none; cursor: pointer; color: #3897F0;" href="{% url 'messages' user.id %}">
+                            <img class="img-circle" src="{% if user.userprofile %}{{ user.userprofile.user_image.url }}{% else %}{% static 'default_profile.png' %}{% endif %}" width="85px" height="90px" title="{{ user.username }}"><strong>&nbsp;{{ user.first_name }} {{ user.last_name }}</strong><br><br>
+                        </a>
+                    </div>
+            {% endfor %}
+        </div>
+         <!-- display user conversation -->
+        <div class="col-sm-6">
+             <div class="load_msg" id="scroll_messages">
+                <div id="loaded_msg">
+                    <p>
+                        {% for msg in messages %}
+                            <div class="message" id="{% if msg.user_from == request.user %}blue{% else %}green{% endif %}" data-toggle="tooltip" title="{{ msg.date }}">{{ msg.msg_body }} <small> {{ msg.date }} </small></div><br><br><br>
+                        {% empty %}
+                            <p>Start a chat!</p>
+                        {% endfor %}
+                    </p>
+                </div>  
+             </div>
+             <!-- message form  -->
+             {% if user_to_msg %}
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <textarea class="form-control" placeholder="Enter your message" name="msg_box" id="message_textarea"></textarea>
+                    <input type="submit" name="send_msg" id="btn-msg" value="Send">
+                </form><br><br>
+                {% if error %}
+                    <h4 style="color: red; text-align: center;">{{ error }}</h4>
+                {% endif %}
+             {% else %}
+                <p>Select a user to start a conversation.</p>
+             {% endif %}         
+        </div>
+    </div>
+{% endblock %}
+
+
+
