@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.views import View
 from main.models import UserProfile
 from .models import Post, Comment, Message
-from .forms import CoverUpdateForm, ProfilePicUpdateForm, PostForm, CommentForm
+from .forms import CoverUpdateForm, ProfilePicUpdateForm, PostForm, CommentForm, EditUserForm, EditUserProfileForm, PasswordRecoveryForm
 from django.http import HttpResponse
 from django.utils.crypto import get_random_string
 import os
@@ -255,7 +255,6 @@ def single_post_view(request, post_id):
 
     return render(request, 'users/single_post.html', context)
 
-
 @login_required
 def comment_post_view(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
@@ -292,7 +291,6 @@ def comment_post_view(request, post_id):
         }
     
     return render(request, 'users/single_post.html', context)
-
 
 @login_required
 def logout_view(request):
@@ -354,8 +352,6 @@ def user_profile_view(request, user_id):
 
     return render(request, 'users/user_profile.html', context)
 
-
-
 @login_required
 def messages_view(request, u_id=None):
     # get all users except logged in user
@@ -408,19 +404,63 @@ def messages_view(request, u_id=None):
 
     return render(request, 'users/messages.html', context)
 
-@login_required(login_url='/')
-def myPosts_view(request, user_id):
-    user_posts = get_object_or_404(UserProfile, user_id=user_id)
-    return render(request, 'users/myposts.html', {'user_posts':user_posts})
 
 @login_required(login_url='/')
-def editProfile_view(request, user_id):
-    user_profile = get_object_or_404(UserProfile, user_id=user_id)
-    return render(request, 'users/edit_profile.html', {'user_profile':user_profile})
+def editProfile_view(request):
+    user = request.user
+    user_profile = UserProfile.objects.get(user=user)
 
-@login_required(login_url='/')
-def search_view(request):
-    return render(request, 'users/search.html')
+    if request.method == 'POST':
+        user_form = EditUserForm(request.POST, instance=user)
+        profile_form = EditUserProfileForm(request.POST, instance=user_profile)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+
+            # Redirect to profile
+            return redirect('profile')
+        
+    else:
+        user_form = EditUserForm(instance=user)
+        profile_form = EditUserProfileForm(instance=user_profile)
+
+    context = {
+            'user_form' : user_form,
+            'profile_form' : profile_form,
+            'user' : user,
+        }
+    
+    return render(request, 'users/edit_profile.html', context)
+
+@login_required
+def recovery_view(request, u_id):
+    user =get_object_or_404(User, id=u_id)
+    if request.method == 'POST':
+        form = PasswordRecoveryForm(request.POST)
+        if form.is_valid():
+            recovery_answer = form.changed_data['recovery_answer']
+            if recovery_answer == user.userprofile.recovery_answer:
+                # Proceed to allow password reset or send a reset email
+                return redirect('edit_profile')
+            else:
+                error = "Incorrect answer!"
+        else:
+            "Please provide an answer!"
+    else:
+        form = PasswordRecoveryForm()
+        error = None
+
+    context = {
+        'form':form,
+        'error':error,
+        'user':user,
+    }
+    return render(request, 'users/recovery.html', context)
+
+
+    
+
 
 def csrf_failure(request, reason=""):
     return render(request, 'csrf_failure.html', {'reason': reason})

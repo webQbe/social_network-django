@@ -14,7 +14,7 @@ class UserProfile(models.Model):
     user_reg_date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=20, default='verified')
     posts = models.TextField(default="0")
-    recovery_account = models.CharField(max_length=255,  default='Iwanttoputadingintheuniverse')
+    recovery_answer = models.CharField(max_length=255,  default='Iwanttoputadingintheuniverse')
 
     def __str__(self):
         return self.user.username

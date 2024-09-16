@@ -188,7 +188,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a href="#">My Posts <span class="badge badge-secondary"> {{ request.user.userprofile.posts }} </span> </a></li>
-                                <li><a href="#">Edit Account</a></li
+                                <li><a href="{% url 'edit_profile' %}">Edit Profile</a></li>
                                 <li role="separator" class="divider"></li>
                                 <li><a href="{% url 'logout' %}">Logout</a></li>
                             </ul>
@@ -197,7 +197,7 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
-                        <form class="navbar-form navbar-left" method="GET" action="{% url 'search_results' %}">
+                        <form class="navbar-form navbar-left" method="GET" action="#">
                             <div class="form-group">
                                 <input type="text" class="form-control" name="query" placeholder="Search">
                             </div>

@@ -7,6 +7,8 @@ from django.conf.urls.static import static
 from django.conf.urls import handler403
 
 urlpatterns = [
+    path('recovery/<int:u_id>/', views.recovery_view, name='recovery'),
+    path('edit_profile/', views.editProfile_view, name='edit_profile'),
     path('messages/<int:u_id>/', views.messages_view, name='messages'),
     path('user_profile/<int:user_id>/', views.user_profile_view, name='user_profile'),
     path('find_people/', views.find_people_view, name="find_people"),
@@ -21,7 +23,6 @@ urlpatterns = [
     path('home/', views.home_view, name='home'),
     path('profile/<int:user_id>/', views.profile_view, name='profile'),
     path('logout/', views.logout_view, name='logout'),
-    path('search/', views.search_view, name='search_results'),
 ] 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

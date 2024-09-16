@@ -1,6 +1,8 @@
 from django import forms
 from main.models import UserProfile
 from .models import Post, Comment
+from django.contrib.auth.models import User
+
 
 class CoverUpdateForm(forms.ModelForm):
     class Meta:
@@ -47,3 +49,23 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ['comment']
+
+
+class EditUserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'password', 'first_name', 'last_name', 'email']
+
+class EditUserProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['describe_user', 'relationship', 'user_country', 'user_gender', 'user_birthday']
+
+
+class PasswordRecoveryForm(forms.Form):
+    recovery_answer = forms.CharField(max_length=100, widget=forms.TextInput(attrs={
+        'class':'form-control',
+        'placeholder':'What is your School Best Friend Name?',
+    }))
+
+    
