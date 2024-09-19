@@ -1,6 +1,15 @@
 {% extends 'users/navbar.html' %}
 {% block title %} Edit Account Settings {% endblock %}
 {% block content %}
+<center>
+    {% if messages %}
+        <div class="alert alert-success">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</center>
 <div class="row">
     <div class="col-sm-2">
     </div>
@@ -96,7 +105,7 @@
                 <tr>
                     <td style="font-weight: bold;">Birthdate</td>
                     <td>
-                        <input class="form-control input-md" type="date" name="user_birthday" required value="{{ user.userprofile.user_birthday }}">
+                        {{ profile_form.user_birthday }}
                     </td>
                 </tr>
                 <!-- password recovery -->
@@ -112,12 +121,10 @@
                                         <h4 class="modal-title">Modal Header</h4>
                                     </div>
                                     <div class="modal-body">
-                                        <form action="{% url 'recovery' user.userprofile.id %}" method="POST" id="f">
                                             <strong>What is your School Best Friend Name?</strong>
-                                            <textarea name="recovery_account" class="form-control" cols="83" rows="4" placeholder="Someone"></textarea><br>
+                                            <textarea name="recovery_answer" class="form-control" cols="83" rows="4" placeholder="Someone"></textarea><br>
                                             <input class="btn btn-default" type="submit" name="sub" value="Submit" style="width: 100px;"><br><br>
                                             <pre>Answer the above question. We will ask this question if you forgot your <br>password.</pre><br><br>  
-                                        </form>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

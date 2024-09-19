@@ -59,13 +59,11 @@ class EditUserForm(forms.ModelForm):
 class EditUserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['describe_user', 'relationship', 'user_country', 'user_gender', 'user_birthday']
+        fields = ['user_birthday', 'describe_user', 'relationship', 'user_country', 'user_gender', 'recovery_answer']
+        widgets = {
+            'user_birthday':forms.DateInput(attrs={'type':'date'}),
+        }
 
-
-class PasswordRecoveryForm(forms.Form):
-    recovery_answer = forms.CharField(max_length=100, widget=forms.TextInput(attrs={
-        'class':'form-control',
-        'placeholder':'What is your School Best Friend Name?',
-    }))
+ 
 
     

@@ -13,4 +13,8 @@
     {% if error %}
         <p style="color: red"> {{ error }} </p>
     {% endif %}
+    
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}"> {{ message }} </div>
+    {% endfor %}
 {% endblock %}
