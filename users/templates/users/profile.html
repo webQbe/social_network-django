@@ -4,15 +4,14 @@
 {% endblock %}
 
 {% block content %}
-<center></center>
+    <!-- Message display block -->
     {% if messages %}
-        <div class="alert alert-success">
+        <div class="alert alert-success" style="position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;">
             {% for message in messages %}
                 <div class="alert alert-{{ message.tags }}">{{ message }}</div>
             {% endfor %}
         </div>
     {% endif %}
-</center>
 <div class="row">
     <div class="col-sm-1"></div>
     <div class="col-sm-14">
@@ -92,15 +91,6 @@
         <p><strong>Date of birth: </strong>{{ user_profile.user_birthday }}</p><br>
     </div>
     <div class="col-sm-8" style="margin: 1% 1% 1% 5%; ">
-        <center>
-            {% if messages %}
-                <div class="alert alert-success">
-                    {% for message in messages %}
-                        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        </center>
         <!-- display user posts -->
         {% for post in posts %}
         <div class="row">

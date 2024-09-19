@@ -418,6 +418,7 @@ def editProfile_view(request):
             user_form.save()
             profile_form.save()
 
+            messages.success(request, 'Your profile has been updated successfully!')
             # Redirect to profile
             return redirect('profile', user_id=user.id)
         
@@ -435,7 +436,30 @@ def editProfile_view(request):
     return render(request, 'users/edit_profile.html', context)
 
 
-    
+@login_required
+def myPosts_view(request, user_id):
+    user_profile = get_object_or_404(UserProfile, user_id=user_id)
+
+    # Check if the logged-in user matches the profile user, If not, redirect to myposts with the logged-in user’s user_id.
+    if request.user != user_profile.user:
+        return redirect('myposts', user_id=request.user.id)
+
+    posts = Post.objects.filter(user=user_profile.user).order_by('-post_date')
+
+    post_count = posts.count()
+
+    # when user is viewing his own post
+    is_own_post = (request.user.id == user_id)
+
+    context = {
+        'user_profile' : user_profile,
+        'posts' : posts,
+        'is_own_post' : is_own_post,
+        'post_count' : post_count,
+    }
+
+    return render(request, 'users/my_post.html', context)
+
 
 
 def csrf_failure(request, reason=""):

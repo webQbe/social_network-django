@@ -1,0 +1,51 @@
+{% extends 'users/navbar.html' %}
+{% block title %}
+    My Post
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-12">
+        <center><h2>Your Latest Posts</h2></center>
+        {% for post in posts %}
+        <div id="own_posts">
+            <div class="row">
+                <div class="col-sm-2">
+                    <p><img src="{{ post.user.userprofile.user_image.url }}" class="img-circle" width="100px" height="100px"></p>
+                </div>
+                <div class="col-sm-6">
+                    <h3><a style="text-decoration: none; cursor: pointer; color: #3897F0;" href="{% url 'user_profile' post.user.id %}">{{ user_profile.user.username }}</a></h3>
+                    <h4><small style="color: black;">Updated a post on <strong>{{ post.post_date }}</strong></small></h4>
+                </div>
+                <div class="col-sm-4">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                      <!-- If a post has both an image and content -->
+                      {% if post.post_content and post.upload_image %}
+                        <p>{{ post.post_content }}</p>
+                        <img id="post-img" src="{{ post.upload_image.url }}" style="height:230px; padding: 5px 10px; min-width: 50%; max-width: 50%;">
+
+                      <!-- If a post only has an image -->
+                      {% elif post.upload_image %}
+                         <img id="post_img" src="{{ post.upload_image.url }}" style="height:230px; padding: 5px 10px; min-width: 50%; max-width: 50%;">
+    
+                      <!-- If a post is text only -->
+                      {% elif post.post_content %}
+                        <h1>{{ post.post_content }}</h1>
+                      {% endif %}
+                </div>
+            </div><br>
+            <a href="{% url 'single_post' post.post_id %}" style="float:left;"><button class="btn btn-success">View</button></a>
+            <a href="{% url 'single_post' post.post_id %}" style="float:left;"><button class="btn btn-info">Comment</button></a>
+            {% if is_own_post %}
+                <a href="{% url 'post_edit' post.post_id %}" style="float:left;"><button class="btn btn-success">Edit</button></a>
+                <a href="{% url 'p_post_delete' post.post_id %}" style="float:left;"><button class="btn btn-danger">Delete</button></a>
+            {% endif %}
+        </div><br><br>
+    {% endfor %}
+    </div>  
+</div>
+
+{% endblock %}
