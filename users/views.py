@@ -27,6 +27,8 @@ def home_view(request):
     # fetch all posts
     posts = Post.objects.all().order_by('-post_date')
 
+    post_count = Post.objects.filter(user=user_profile.user).count()
+
     # pagination
     per_page = 4 # Posts per page
 
@@ -38,7 +40,8 @@ def home_view(request):
     context = {
         'posts':page,
         'user_profile':user_profile,
-        'logged_in_user': request.user, 
+        'logged_in_user': request.user,
+        'post_count' : post_count,
     }
     return render(request, 'users/home.html', context)
 
@@ -50,11 +53,14 @@ def profile_view(request, user_id):
     # latest 5 posts
     posts = Post.objects.filter(user=user).order_by('-post_date')[:5]
 
+    post_count = Post.objects.filter(user=user_profile.user).count()
+
     context = {
         'user': user,
         'user_profile': user_profile,
         'posts': posts,
         'logged_in_user': request.user, 
+        'post_count' : post_count,
     }
 
     return render(request, 'users/profile.html', context)
@@ -227,6 +233,7 @@ def post_delete_profile(request, post_id):
 @login_required
 def edit_post_view(request, post_id):
     post = get_object_or_404(Post, post_id=post_id, user=request.user)
+    user_profile = get_object_or_404(UserProfile, user=request.user)
 
     if request.method == 'POST':
         content = request.POST.get('post_content')
@@ -236,8 +243,11 @@ def edit_post_view(request, post_id):
         messages.success(request, 'Post has been updated successfully!')
         return redirect('profile', user_id=request.user.id)
     
+    post_count = Post.objects.filter(user=user_profile.user).count()
+    
     context = {
         'post':post,
+        'post_count': post_count,
     }
     return render(request, 'users/edit_post.html', context)
 
@@ -246,11 +256,15 @@ def single_post_view(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
     user_profile = get_object_or_404(UserProfile, user=request.user)
 
+    post_count = Post.objects.filter(user=user_profile.user).count()
+
     context = {
         'post':post,
         'form':CommentForm(),
         'comments': Comment.objects.filter(post=post).order_by('-date'),
         'user_profile':user_profile,
+        'post_count' : post_count,
+        
     }
 
     return render(request, 'users/single_post.html', context)
@@ -320,10 +334,13 @@ def find_people_view(request):
         # If no search term is provided, retrieve all users
         users = User.objects.all()
 
+    post_count = Post.objects.filter(user=user_profile.user).count()
+
     context = {
         'users' : users,
         'search_query' : search_query,
         'user_profile': user_profile,
+        'post_count' : post_count,
     }
 
     return render(request, 'users/members.html', context)
@@ -343,11 +360,14 @@ def user_profile_view(request, user_id):
     # when user is viewing his own profile
     is_own_profile = (logged_in_user.id == user_id)
 
+    post_count = Post.objects.filter(user=user_profile.user).count()
+
     context = {
         'user': user,
         'posts': posts,
         'user_profile' : user_profile,
         'is_own_profile' : is_own_profile,
+        'post_count' : post_count,
     }
 
     return render(request, 'users/user_profile.html', context)
@@ -393,6 +413,8 @@ def messages_view(request, u_id=None):
         
     user_profile = get_object_or_404(UserProfile, user=request.user)
 
+    post_count = Post.objects.filter(user=user_profile.user).count()
+
     context = {
         'all_users': users,
         'messages' : messages,
@@ -400,6 +422,7 @@ def messages_view(request, u_id=None):
         'error' : error,
         'user_profile' : user_profile,
         'receiver_profile' : receiver_profile,
+        'post_count' : post_count,
     }
 
     return render(request, 'users/messages.html', context)
@@ -426,11 +449,14 @@ def editProfile_view(request):
         user_form = EditUserForm(instance=user)
         profile_form = EditUserProfileForm(instance=user_profile)
 
+    post_count = Post.objects.filter(user=user_profile.user).count()
+
     context = {
             'user_form' : user_form,
             'profile_form' : profile_form,
             'user' : user,
             'user_profile' : user_profile,
+            'post_count' : post_count,
         }
     
     return render(request, 'users/edit_profile.html', context)
