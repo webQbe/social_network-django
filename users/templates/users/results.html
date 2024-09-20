@@ -1,0 +1,80 @@
+{% extends 'users/navbar.html' %}
+{% block title %}
+    See Results
+{% endblock %}
+
+{% block content %}
+        <div class="row">
+            <center><h2>See your results here!</h2></center>
+            {% if results %}
+                {% for post in results %}
+                <div class="row">
+                    <div class="col-sm-3">
+                    </div>
+                    <div id="posts" class="col-sm-6">
+                        <!-- user details -->
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <a style="text-decoration:none; cursor:pointer; color:#3897f0; " href="{% url 'user_profile' post.user.id %}">
+                                <p><img src="{{ post.user.userprofile.user_image.url }}" class="img-circle" width="50px" height="50px"></p>
+                            </div>
+                            <div class="col-sm-6">
+                                <b>{{ post.user.username }}</a></b>
+                                <h4><small style="color:black;">Updated a post on <strong>{{ post.post_date }}</strong></small></h4>
+                            </div>
+                            <div class="col-sm-4">
+                            </div>
+                        </div>
+                        <!-- post details -->
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <!-- If a post has both an image and content -->
+                                {% if post.post_content and post.upload_image %}
+                                    <p>{{ post.post_content }}</p>
+                                    <img id="posts-img" src="{{ post.upload_image.url }}" style="height:230x; padding: 5px 10px; min-width: 102%; max-width: 50%;">
+                                
+                                <!-- If a post only has an image -->
+                                {% elif post.upload_image %}
+                                    <img id="posts-img" src="{{ post.upload_image.url }}" style="height:230px; padding: 5px 10px; min-width: 102%; max-width: 50%;">
+                            
+                                 <!-- If a post is text only -->
+                                {% elif post.post_content %}
+                                    <h1>{{ post.post_content }}</h1>
+                                {% endif %}
+                            </div>
+                        </div><br>
+                        <a href="{% url 'single_post' post.post_id %}" style="float:left;"><button class="btn btn-success">View</button></a>
+                        <a href="{% url 'single_post' post.post_id %}" style="float:left;"><button class="btn btn-info">Comment</button></a>
+                        {% if post.user == logged_in_user %}
+                            <a href="{% url 'post_edit' post.post_id %}" style="float:left;"><button class="btn btn-success">Edit</button></a>
+                            <a href="{% url 'h_post_delete' post.post_id %}" style="float:left;"><button class="btn btn-danger">Delete</button></a>
+                        {% endif %}
+                    </div>
+                    <div class="col-sm-3"></div>
+                </div><br><br>
+                {% endfor %}
+            {% else %}
+                <p>No results found for "{{ query }}"</p>
+            {% endif %}
+            <!-- Pagination links -->
+                <center>
+                    <div class="pagination">
+                        <span class="step-links">
+                            {% if results.has_previous %}
+                                <a href="?query={{ query }}&page={{ results.previous_page_number }}">Previous</a>
+                                <br><br>  
+                                <p>{{ results.number }} of {{ results.paginator.num_pages }}</p>
+                                <a href="?query={{ query }}&page=1">First Page </a>
+                            {% endif %}
+                            {% if results.has_next %}
+                                <a href="?query={{ query }}&page={{ results.next_page_number }}">Next Page</a><br><br>
+                                <p>{{ results.number }} of {{ results.paginator.num_pages }}</p>
+                                <a href="?query={{ query }}&page={{ results.paginator.num_pages }}"> Last Page</a>
+                            {% endif %}
+                        </span>
+                    </div>
+                </center>
+        </div>
+{% endblock %}
+
+

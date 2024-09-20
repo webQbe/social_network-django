@@ -33,12 +33,12 @@ def home_view(request):
     per_page = 4 # Posts per page
 
     # Pagination logic
-    all_pages = Paginator(posts, per_page) 
+    paginator = Paginator(posts, per_page) 
     page_number = request.GET.get('page', 1)
-    page = all_pages.get_page(page_number)
+    page_obj = paginator.get_page(page_number)
 
     context = {
-        'posts':page,
+        'posts':page_obj,  # Contains the paginated posts
         'user_profile':user_profile,
         'logged_in_user': request.user,
         'post_count' : post_count,
@@ -486,6 +486,38 @@ def myPosts_view(request, user_id):
 
     return render(request, 'users/my_post.html', context)
 
+@login_required
+def post_search_view(request, user_id):
+    user_profile = get_object_or_404(UserProfile, user_id=user_id)
+
+    query = request.GET.get('query')
+    if query:
+        results = Post.objects.filter(post_content__icontains=query)|Post.objects.filter(upload_image__icontains=query) 
+    else:
+        results = Post.objects.none()
+
+    post_count = Post.objects.filter(user=user_profile.user).count()
+
+    # when user is viewing his own post
+    is_own_post = (request.user.id == user_id)
+
+    # pagination
+    per_page = 4 # results per page
+
+    # Pagination logic
+    paginator = Paginator(results, per_page) 
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'results':page_obj,  # Contains the paginated results
+        'query' : query,
+        'user_profile' : user_profile,
+        'logged_in_user': request.user,
+        'post_count': post_count, 
+    }
+
+    return render(request, 'users/results.html', context)
 
 
 def csrf_failure(request, reason=""):

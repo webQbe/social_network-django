@@ -197,9 +197,9 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
-                        <form class="navbar-form navbar-left" method="GET" action="#">
+                        <form class="navbar-form navbar-left" method="GET" action="{% url 'post_search' request.user.id %}">
                             <div class="form-group">
-                                <input type="text" class="form-control" name="query" placeholder="Search">
+                                <input type="text" class="form-control" name="query" placeholder="Search Posts!">
                             </div>
                             <button type="submit" class="btn btn-info" name="search">Search</button>
                         </form>
