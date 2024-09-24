@@ -7,6 +7,8 @@ from django.conf.urls.static import static
 from django.conf.urls import handler403
 
 urlpatterns = [
+    path('forgot_password/', views.forgot_password_view, name='forgot_password'),
+    path('change_password/', views.change_password_view, name='change_password'),
     path('search/<int:user_id>/', views.post_search_view, name='post_search'),
     path('myposts/<int:user_id>/', views.myPosts_view, name='myposts'),
     path('edit_profile/', views.editProfile_view, name='edit_profile'),

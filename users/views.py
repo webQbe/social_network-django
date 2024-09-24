@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.views import View
 from main.models import UserProfile
 from .models import Post, Comment, Message
-from .forms import CoverUpdateForm, ProfilePicUpdateForm, PostForm, CommentForm, EditUserForm, EditUserProfileForm
+from .forms import CoverUpdateForm, ProfilePicUpdateForm, PostForm, CommentForm, EditUserForm, EditUserProfileForm, ForgotPasswordForm, ChangePasswordForm
 from django.http import HttpResponse
 from django.utils.crypto import get_random_string
 import os
@@ -15,6 +15,7 @@ from django.core.files.storage import default_storage
 from django.core.paginator import Paginator
 from django.views.decorators.cache import never_cache
 from django.db import models
+from django.contrib.auth.hashers import make_password
 
 
 
@@ -518,6 +519,66 @@ def post_search_view(request, user_id):
     }
 
     return render(request, 'users/results.html', context)
+
+def forgot_password_view(request):
+    if request.method == 'POST':
+        form = ForgotPasswordForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data.get('email')
+            recovery_answer = form.cleaned_data.get('recovery_answer')
+
+            try:
+                user = User.objects.get(email=email.strip().lower(), userprofile__recovery_answer=recovery_answer.strip().lower()) # identify the user
+                print(f"Found User: {user.username}") 
+                print(f"User Email: {user.email}, Recovery Answer: {user.userprofile.recovery_answer}")
+                request.session['email'] = user.email # Store the email in session
+                return redirect('change_password')
+            
+            except User.DoesNotExist:
+                print("No matching user found.") 
+                messages.error(request, "Your email or recovery answer is incorrect.")
+
+    else:
+        form = ForgotPasswordForm()
+        
+    return render(request, 'users/forgot_password.html', {'form':form})
+    
+
+
+def change_password_view(request):
+    if request.method == 'POST':
+        form = ChangePasswordForm(request.POST)
+        if form.is_valid():
+            password = request.POST.get('password')
+            password2 = request.POST.get('password2')
+
+            if password == password2:
+                if 6 <= len(password) <= 60:
+                    email = request.session.get('email')
+                    
+                    if email:
+                        user = User.objects.get(email=email)
+                        user.password = make_password(password)  # Hash the password
+                        user.save()
+                        messages.success(request, 'Your Password changed a moment ago!')
+                        return redirect('login')  # Redirect to the login page
+                    
+                    else:
+                        messages.error(request, "Session expired or invalid.")
+                        return redirect('forgot_password')
+
+                else:
+                    messages.error(request, 'Your Password length should be between 6 - 60 characters!')
+
+            else:
+                messages.error(request, 'Your Passwords did not match!')
+
+    else:
+        form = ChangePasswordForm()
+
+    return render(request, 'users/change_password.html', {'form': form})
+
+
 
 
 def csrf_failure(request, reason=""):
