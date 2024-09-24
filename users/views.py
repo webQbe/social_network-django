@@ -524,19 +524,23 @@ def forgot_password_view(request):
     if request.method == 'POST':
         form = ForgotPasswordForm(request.POST)
         if form.is_valid():
-            email = form.cleaned_data.get('email')
-            recovery_answer = form.cleaned_data.get('recovery_answer')
+            email = form.cleaned_data.get('email', '').strip().lower()
+            recovery_answer = form.cleaned_data.get('recovery_answer', '')
+
+            # Try to find the user with the given email and recovery answer
 
             try:
-                user = User.objects.get(email=email.strip().lower(), userprofile__recovery_answer=recovery_answer.strip().lower()) # identify the user
-                print(f"Found User: {user.username}") 
-                print(f"User Email: {user.email}, Recovery Answer: {user.userprofile.recovery_answer}")
+                user = User.objects.get(email=email, userprofile__recovery_answer=recovery_answer) # identify the user
                 request.session['email'] = user.email # Store the email in session
+                request.session['password_reset_allowed'] = True # Set permission for accessing the change password page
                 return redirect('change_password')
             
             except User.DoesNotExist:
-                print("No matching user found.") 
+                # If the user is not found, display only this error message
                 messages.error(request, "Your email or recovery answer is incorrect.")
+               
+        else:
+             messages.error(request, "Form is not valid.")
 
     else:
         form = ForgotPasswordForm()
@@ -546,6 +550,11 @@ def forgot_password_view(request):
 
 
 def change_password_view(request):
+    # Redirect to forgot password page if the session variable is not set
+    if not request.session.get('password_reset_allowed'):
+        messages.error(request, "Unauthorized access! Please fill this form")
+        return redirect('forgot_password')
+
     if request.method == 'POST':
         form = ChangePasswordForm(request.POST)
         if form.is_valid():
@@ -554,12 +563,17 @@ def change_password_view(request):
 
             if password == password2:
                 if 6 <= len(password) <= 60:
-                    email = request.session.get('email')
+                    email = request.session.get('email') # Get the email from session
                     
                     if email:
                         user = User.objects.get(email=email)
                         user.password = make_password(password)  # Hash the password
                         user.save()
+
+                        # Clear the session variables after successful password reset
+                        del request.session['password_reset_allowed']
+                        del request.session['email']
+
                         messages.success(request, 'Your Password changed a moment ago!')
                         return redirect('login')  # Redirect to the login page
                     
@@ -568,7 +582,7 @@ def change_password_view(request):
                         return redirect('forgot_password')
 
                 else:
-                    messages.error(request, 'Your Password length should be between 6 - 60 characters!')
+                    messages.error(request, 'Your Password length must be between 6 - 60 characters!')
 
             else:
                 messages.error(request, 'Your Passwords did not match!')

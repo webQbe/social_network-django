@@ -67,16 +67,9 @@ class EditUserProfileForm(forms.ModelForm):
     
 class ForgotPasswordForm(forms.Form):    
     email = forms.EmailField(required=True, label='Email')
-
-    class Meta:
-        model = User
-        fields = [ 'email', 'recovery_answer',]
+    recovery_answer = forms.CharField(required=True, label="Recovery Answer")
 
 
 class ChangePasswordForm(forms.Form):    
     password = forms.CharField(required=True, label='New Password')
     password2 = forms.CharField(required=True, label='Confirm Password')
-
-    class Meta:
-        model = User
-        fields = [ 'password']
