@@ -208,13 +208,28 @@
 
     .nav-text {
         display: inline;
-        font-size: 16px; /* Adjust font size if necessary */
+        text-align: center;
     }
+
 }
 
+#upload_image_button{
+    position: absolute;
+    top: 50%;
+    right: 15%;
+    min-width: 70px;
+    max-width: 70px;
+    border-radius: 4px;
+    transform: translate(-50%, -50%);
+    background-color: #ece9e9;
+}
 
-
-
+#insert_post{
+    background-color: #cccbcb;
+    border: 2px solid #cccbcb;
+    padding: 40px 50px;
+    border-radius: 15px;
+}
 </style>
 </head>
 <body>
@@ -257,7 +272,7 @@
                             <div class="form-group">
                                 <input type="text" class="form-control" name="query" placeholder="Search Posts!">
                             </div>
-                            <button style="background-color: #062e2b;" type="submit" class="btn btn-info" name="search">Search</button>
+                            <button style="background-color: #062e2b;" type="submit" class="btn btn-info" name="search">Go</button>
                         </form>
                     </li>
                 </ul>

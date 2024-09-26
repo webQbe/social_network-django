@@ -1,15 +1,6 @@
 body{
     overflow-x: hidden;
 }
-#upload_image_button{
-    position: absolute;
-    top: 47.5%;
-    right: 13.7%;
-    min-width: 100px;
-    max-width: 100px;
-    border-radius: 4px;
-    transform: translate(-50%, -50%);
-}
 
 label{
     padding: 7px;
@@ -30,11 +21,7 @@ input[type="file"]{
     max-width: 25%;
 }
 
-#insert_post{
-    background-color: #fff;
-    border: 2px solid #e6e6e6;
-    padding: 40px 50px;
-}
+
 
 
 #posts{

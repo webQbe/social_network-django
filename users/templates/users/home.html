@@ -1,5 +1,6 @@
 {% extends 'users/navbar.html' %}
 {% block title %}{{ user.first_name }} {{ user.last_name }}{% endblock %}
+{% load static %}
 {% block content %}
 <center>
     {% if messages %}
@@ -15,9 +16,8 @@
         <center>
             <form action="{% url 'create_post' %}" method="post" id="f" enctype="multipart/form-data">
                 {% csrf_token %}
-                <textarea class="form-control" rows="4" id="content" name="post_content" placeholder="What's in your mind?"></textarea><br>
-                <label class="btn btn-warning" id="upload_image_button">Select Image
-                    <input type="file" name="upload_image" size="30">
+                <textarea class="form-control" rows="4" id="content" name="post_content" placeholder="What's in your mind?"></textarea>
+                <label class="btn btn-warning" id="upload_image_button"><img src="{% static 'users/images/image.png' %}" class="img-rounded" title="Upload Image" height="25px"><input type="file" name="upload_image">
                 </label>
                 <button id="btn-post" class="btn btn-success" name="sub">Post</button>
             </form>
