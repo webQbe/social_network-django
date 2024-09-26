@@ -183,6 +183,37 @@
         border-radius: 30px;
     }
 
+    .navbar-brand{
+        font-family: 'Courier New', Courier, monospace;
+    }
+
+    .navbar{
+        background-color: #062e2b;
+        
+    }
+
+    .nav-text {
+        display: none;
+    }
+
+    .nav-icon {
+        display: inline;
+    }
+
+    /* On mobile screens (max width of 767px), hide icons and show text */
+    @media (max-width: 767px) {
+    .nav-icon {
+        display: none;
+    }
+
+    .nav-text {
+        display: inline;
+        font-size: 16px; /* Adjust font size if necessary */
+    }
+}
+
+
+
 
 </style>
 </head>
@@ -196,28 +227,28 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a href="{% url 'home' %}" class="navbar-brand">Coding Cafe</a>
+                <a href="{% url 'home' %}" class="navbar-brand"><b style="color: #ddd;">Codebook</b></a>
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     {% if user.is_authenticated %}
                         {% with user.profile as profile %}
-                        <li><a href="{% url 'profile' request.user.id %}">{{ request.user.first_name }}</a></li>
-                        {% endwith %}
-                        <li><a href="{% url 'home' %}">Home</a></li>
-                        <li><a href="{% url 'find_people' %}">Find People</a></li>
-                        <li><a href="{% url 'messages' request.user.id %}">Messages</a></li>
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                <span><i class="glyphicon glyphicon-chevron-down"></i></span>
+                            <a style="color: #fff; border-bottom-right-radius: 10px; " href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <span><img src="{{ user.userprofile.user_image.url }}" class="img-circle nav-icon" height="30px" title="Profile"></span>
                             </a>
-                            <ul class="dropdown-menu">
-                                <li><a href="{% url 'myposts' request.user.id %}">My Posts <span class="badge badge-secondary">{{post_count}}</span></a></li>
-                                <li><a href="{% url 'edit_profile' %}">Edit Profile</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li><a href="{% url 'logout' %}">Logout</a></li>
+                            <ul style="background-color: #062e2b;" class="dropdown-menu">
+                                <li><a style="font-weight:bolder; color:#7e7e7e;" href="{% url 'profile' request.user.id %}">{{ user.first_name }} {{ user.last_name }}</a></li>
+                                <li><a style="font-weight:bolder; color:#7e7e7e;" href="{% url 'myposts' request.user.id %}">Uploads <span class="badge badge-secondary">{{post_count}}</span></a></li>
+                                <li><a style="font-weight:bolder; color:#7e7e7e;" href="{% url 'edit_profile' %}">Edit Profile</a></li>
+                                <li style="background-color: #7e7e7e;"role="separator" class="divider"></li>
+                                <li><a style="font-weight:bolder; color:#7e7e7e;" href="{% url 'logout' %}">Logout</a></li>
                             </ul>
                         </li>
+                        {% endwith %}
+                        <li><a href="{% url 'home' %}"><img src="{% static 'users/images/home.png' %}" class="img-rounded nav-icon" title="Home"  height="20px"><span class="nav-text">Home</span></a></li>
+                        <li><a href="{% url 'find_people' %}"><img src="{% static 'users/images/find.png' %}" class="img-rounded nav-icon" title="Find People"  height="20px"><span class="nav-text">Find People</span></a></li>
+                        <li><a href="{% url 'messages' request.user.id %}"><img src="{% static 'users/images/message.png' %}" class="img-rounded nav-icon" title="Messages"  height="20px"><span class="nav-text">Messages</span></a></li>
                     {% endif %}
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
@@ -226,7 +257,7 @@
                             <div class="form-group">
                                 <input type="text" class="form-control" name="query" placeholder="Search Posts!">
                             </div>
-                            <button type="submit" class="btn btn-info" name="search">Search</button>
+                            <button style="background-color: #062e2b;" type="submit" class="btn btn-info" name="search">Search</button>
                         </form>
                     </li>
                 </ul>
