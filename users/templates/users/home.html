@@ -84,16 +84,15 @@
     <div class="pagination">
         <span class="step-links">
             {% if posts.has_previous %}
-                <a href="?page={{ posts.previous_page_number }}">Previous</a>
-                <br><br>  
-                <p>{{ posts.number }} of {{ posts.paginator.num_pages }}</p>
-                <a href="?page=1">First Page </a>
+                <!-- <p>{{ posts.number }} of {{ posts.paginator.num_pages }}</p> -->
+                <a href="?page=1">First Page</a>
+                <a href="?page={{ posts.previous_page_number }}"> << Prev Page </a>
             {% endif %}
             {% if posts.has_next %}
-                <a href="?page={{ posts.next_page_number }}">Next Page</a><br><br>
-                <p>{{ posts.number }} of {{ posts.paginator.num_pages }}</p>
+                <a href="?page={{ posts.next_page_number }}"> Next Page >> </a>
                 <a href="?page={{ posts.paginator.num_pages }}"> Last Page</a>
             {% endif %}
+                <p>{{ posts.number }} of {{ posts.paginator.num_pages }}</p>
         </span>
     </div>
  </center>
