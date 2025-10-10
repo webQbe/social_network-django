@@ -1,0 +1,7 @@
+Django==4.2.15
+asgiref==3.8.1
+django-allauth==64.0.0
+django-crispy-forms==2.3
+Pillow==7.0.0
+requests==2.22.0
+sqlparse==0.5.1
