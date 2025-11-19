@@ -13,7 +13,7 @@ urlpatterns = [
     path('myposts/<int:user_id>/', views.myPosts_view, name='myposts'),
     path('edit_profile/', views.editProfile_view, name='edit_profile'),
     path('messages/<int:u_id>/', views.messages_view, name='messages'),
-    path('user_profile/<int:user_id>/', views.user_profile_view, name='user_profile'),
+    path('user_posts/<int:user_id>/', views.user_posts_view, name='user_posts'),
     path('find_people/', views.find_people_view, name="find_people"),
     path('post/<int:post_id>/comment/', views.comment_post_view, name='comment_post'),
     path('post/<int:post_id>/like/', views.like_post_view, name='like_post'),
@@ -26,6 +26,7 @@ urlpatterns = [
     path('update_cover/<int:user_id>/', views.updateCover_view, name="update_cover"),
     path('home/', views.home_view, name='home'),
     path('profile/<int:user_id>/', views.profile_view, name='profile'),
+    path('profile/<int:user_id>/follow/', views.toggle_follow_view, name='toggle_follow'),
     path('logout/', views.logout_view, name='logout'),
 ] 
 if settings.DEBUG:

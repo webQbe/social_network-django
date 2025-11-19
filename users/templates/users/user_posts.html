@@ -25,7 +25,27 @@
     
                                 <li class="list-group-item" title="User Registration Date"><strong>{{user_profile.user_reg_date}}</strong></li>
                             </ul>
-                        <br><br><br>
+                            <!-- show follower count -->
+                            <span class="ml-2">
+                                {{ follower_count }} {{ follower_count|pluralize:"Follower,Followers" }}
+                            </span> <br><br>
+                            <a href="{% url 'profile' user.id %}">
+                                <button class="btn btn-success">View Profile</button>
+                            </a>
+                            {% if is_own_profile %}
+                                <a href="{% url 'edit_profile' %}" class="btn btn-success">Edit Profile</a>
+                            {% else %}
+                                <form action="{% url 'toggle_follow' user.id %}" method="post" style="display:inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                                    {% if is_following %}
+                                        <button type="submit" class="btn btn-danger">Unfollow</button>
+                                    {% else %}
+                                        <button type="submit" class="btn btn-primary">Follow</button>
+                                    {% endif %}
+                                </form>
+                            {% endif %}
+                            <br><br><br>
                     </div>
                 </center>   
                 <div class="col-sm-8">
@@ -38,7 +58,7 @@
                                 <p><img src="{{ post.user.userprofile.user_image.url }}" class="img-circle" width="100px" height="100px"></p>
                             </div>
                             <div class="col-sm-6"  style="margin-left: 30px;">
-                                <h3><a style="text-decoration: none; cursor: pointer; color: #3897F0;" href="{% url 'user_profile' post.user.id %}">{{ user_profile.user.username }}</a></h3>
+                                <h3><a style="text-decoration: none; cursor: pointer; color: #3897F0;" href="{% url 'profile' post.user.id %}">{{ user_profile.user.username }}</a></h3>
                                 <h4><small style="color: black;">Updated a post on <strong>{{ post.post_date }}</strong></small></h4>
                             </div>
                             <div class="col-sm-4">

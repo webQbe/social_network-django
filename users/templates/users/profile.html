@@ -89,6 +89,23 @@
         <p><strong>Member since: </strong>{{ user_profile.user_reg_date }}</p><br>
         <p><strong>Gender: </strong>{{ user_profile.user_gender }}</p><br>
         <p><strong>Date of birth: </strong>{{ user_profile.user_birthday }}</p><br>
+        {% if is_own_profile %}
+            <a href="{% url 'edit_profile' %}" class="btn btn-success">Edit Profile</a>
+        {% else %}
+            <form action="{% url 'toggle_follow' user.id %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                {% if is_following %}
+                    <button type="submit" class="btn btn-danger">Unfollow</button>
+                {% else %}
+                    <button type="submit" class="btn btn-primary">Follow</button>
+                {% endif %}
+            </form>
+        {% endif %}
+        <!-- show follower count -->
+        <span class="ml-2">
+            {{ follower_count }} {{ follower_count|pluralize:"Follower,Followers" }}
+        </span>
     </div>
     <div class="col-sm-8" style="margin: 1% 1% 1% 5%; ">
         <!-- display user posts -->
@@ -100,7 +117,7 @@
                 <!-- user details -->
                 <div class="row">
                     <div class="col-sm-2">
-                        <a style="text-decoration:none; cursor:pointer; color:#3897f0; " href="{% url 'user_profile' post.user.id %}">
+                        <a style="text-decoration:none; cursor:pointer; color:#3897f0; " href="{% url 'profile' post.user.id %}">
                         <p><img src="{{ post.user.userprofile.user_image.url }}" class="img-circle" width="50px" height="50px"></p>
                     </div>
                     <div class="col-sm-6">

@@ -15,6 +15,11 @@ class UserProfile(models.Model):
     status = models.CharField(max_length=20, default='verified')
     posts = models.TextField(default="0")
     recovery_answer = models.CharField(max_length=255,  default='Iwanttoputadingintheuniverse', blank=True, null=True)
+    following = models.ManyToManyField( # list of UserProfile objects the user follows
+        User,
+        related_name='following',  
+        blank=True
+    )
 
     def __str__(self):
         return self.user.username

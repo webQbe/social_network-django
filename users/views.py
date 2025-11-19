@@ -56,16 +56,45 @@ def profile_view(request, user_id):
 
     post_count = Post.objects.filter(user=user_profile.user).count()
 
+    is_own_profile = (request.user == user)
+    is_following = user_profile.following.filter(pk=request.user.pk).exists()
+    follower_count = user_profile.following.count()
+
     context = {
         'user': user,
         'user_profile': user_profile,
         'posts': posts,
         'logged_in_user': request.user, 
         'post_count' : post_count,
+        'is_own_profile': is_own_profile,
+        'is_following': is_following,
+        'follower_count': follower_count,
     }
 
     return render(request, 'users/profile.html', context)
 
+@login_required
+def toggle_follow_view(request, user_id):
+    if request.method != 'POST':
+        return HttpResponseBadRequest("Invalid request method")
+    
+    target_user = get_object_or_404(User, pk=user_id)
+    # prevent following user's own profile
+    if request.user == target_user:
+        messages.error(request, "You cannot follow yourself.")
+        return redirect(request.POST.get('next') or request.META.get('HTTP_REFERER') or '/')
+
+    target_profile = get_object_or_404(UserProfile, user=target_user)
+
+    # Efficient existence check
+    if target_profile.following.filter(pk=request.user.pk).exists():
+        target_profile.following.remove(request.user)
+    else:
+        target_profile.following.add(request.user)
+
+    # redirect back to profile page (or use 'next' POST param)
+    next_url = request.POST.get('next') or request.META.get('HTTP_REFERER') or '/'
+    return redirect(next_url)
 
 @login_required
 def updateCover_view(request, user_id):
@@ -371,7 +400,7 @@ def find_people_view(request):
     return render(request, 'users/members.html', context)
 
 @login_required
-def user_profile_view(request, user_id):
+def user_posts_view(request, user_id):
     # get user by id
     user_profile = get_object_or_404(UserProfile, user_id=user_id)
     user = get_object_or_404(User, pk=user_id)
@@ -384,7 +413,8 @@ def user_profile_view(request, user_id):
 
     # when user is viewing his own profile
     is_own_profile = (logged_in_user.id == user_id)
-
+    is_following = user_profile.following.filter(pk=request.user.pk).exists()
+    follower_count = user_profile.following.count()
     post_count = Post.objects.filter(user=user_profile.user).count()
 
     context = {
@@ -393,9 +423,12 @@ def user_profile_view(request, user_id):
         'user_profile' : user_profile,
         'is_own_profile' : is_own_profile,
         'post_count' : post_count,
+        'logged_in_user': request.user,
+        'is_following': is_following,
+        'follower_count': follower_count,
     }
 
-    return render(request, 'users/user_profile.html', context)
+    return render(request, 'users/user_posts.html', context)
 
 @login_required
 def messages_view(request, u_id=None):
