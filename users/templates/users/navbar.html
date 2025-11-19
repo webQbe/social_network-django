@@ -254,7 +254,7 @@
                             </a>
                             <ul style="background-color: #062e2b;" class="dropdown-menu">
                                 <li><a style="font-weight:bolder; color:#7e7e7e;" href="{% url 'profile' request.user.id %}">{{ request.user.first_name }} {{ request.user.last_name }}</a></li>
-                                <li><a style="font-weight:bolder; color:#7e7e7e;" href="{% url 'myposts' request.user.id %}">Uploads <span class="badge badge-secondary">{{post_count}}</span></a></li>
+                                <li><a style="font-weight:bolder; color:#7e7e7e;" href="{% url 'user_posts' request.user.id %}">Uploads <span class="badge badge-secondary">{{post_count}}</span></a></li>
                                 <li><a style="font-weight:bolder; color:#7e7e7e;" href="{% url 'edit_profile' %}">Edit Profile</a></li>
                                 <li style="background-color: #7e7e7e;"role="separator" class="divider"></li>
                                 <li><a style="font-weight:bolder; color:#7e7e7e;" href="{% url 'logout' %}">Logout</a></li>
