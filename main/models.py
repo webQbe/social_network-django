@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 # Create your models here.
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    describe_user = models.CharField(max_length=255, default='Hello Coding Cafe. This is my default status!')
+    describe_user = models.CharField(max_length=255, default='Hello Codebook. This is my default status!')
     relationship = models.CharField(max_length=100, blank=True)
     user_country = models.CharField(max_length=100)
     user_gender = models.CharField(max_length=10)
