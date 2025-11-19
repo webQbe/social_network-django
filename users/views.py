@@ -7,7 +7,7 @@ from django.views import View
 from main.models import UserProfile
 from .models import Post, Comment, Message
 from .forms import CoverUpdateForm, ProfilePicUpdateForm, PostForm, CommentForm, EditUserForm, EditUserProfileForm, ForgotPasswordForm, ChangePasswordForm
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.utils.crypto import get_random_string
 import os
 from django.middleware.csrf import CsrfViewMiddleware
@@ -306,6 +306,30 @@ def comment_post_view(request, post_id):
         }
     
     return render(request, 'users/single_post.html', context)
+
+@login_required
+def like_post_view(request, post_id):
+    """  Toggle like/unlike for the logged in user on given post.
+         Accepts POST requests only. 
+    """
+    if request.method != 'POST':
+        return HttpResponseBadRequest("Invalid request method")
+
+    post = get_object_or_404(Post, post_id=post_id)
+    user = request.user
+
+    if user in post.likes.all():
+        post.likes.remove(user)
+        liked = False
+    else:
+        post.likes.add(user)
+        liked = True
+
+    total = post.total_likes
+
+    # redirect back
+    next_url = request.POST.get('next') or request.META.get('HTTP_REFERER') or '/'
+    return redirect(next_url)
 
 @login_required
 def logout_view(request):

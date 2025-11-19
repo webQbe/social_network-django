@@ -69,11 +69,33 @@
                         {% endif %}
                     </div>
                 </div><br>
-                <a href="{% url 'single_post' post.post_id %}" style="float:left;"><button class="btn btn-success">View</button></a>
-                <a href="{% url 'single_post' post.post_id %}" style="float:left;"><button class="btn btn-info">Comment</button></a>
+                <span style="float:left; margin-left:8px;">
+                    {{ post.total_likes }} {{ post.total_likes|pluralize:"Like,Likes" }}
+                </span><br>
+                <!-- buttons area: put this where your old button block was -->
+                <a href="{% url 'single_post' post.post_id %}" style="float:left;">
+                    <button class="btn btn-success">View</button>
+                </a>
+                <form method="post" action="{% url 'like_post' post.post_id %}" style="display:inline; float:left; margin-left:8px;">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                    {% if user in post.likes.all %}
+                        <button type="submit" class="btn btn-danger">Unlike</button>
+                    {% else %}
+                        <button type="submit" class="btn btn-primary">Like</button>
+                    {% endif %}
+                </form>
+                <a href="{% url 'single_post' post.post_id %}" style="float:left; margin-left:8px;">
+                    <button class="btn btn-info">Comments</button>
+                </a>
+
                 {% if post.user == logged_in_user %}
-                    <a href="{% url 'post_edit' post.post_id %}" style="float:left;"><button class="btn btn-success">Edit</button></a>
-                    <a href="{% url 'h_post_delete' post.post_id %}" style="float:left;"><button class="btn btn-danger">Delete</button></a>
+                    <a href="{% url 'post_edit' post.post_id %}" style="float:left; margin-left:8px;">
+                        <button class="btn btn-success">Edit</button>
+                    </a>
+                    <a href="{% url 'h_post_delete' post.post_id %}" style="float:left; margin-left:8px;">
+                        <button class="btn btn-danger">Delete</button>
+                    </a>
                 {% endif %}
             </div>
             <div class="col-sm-3"></div>

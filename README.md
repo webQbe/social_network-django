@@ -68,6 +68,8 @@
 ### My Additions: 
 - Redesigned main page, navigation bar, and pagination
 - Restyled signup, login, post upload form, and password recovery pages
+- Added Post Like-Unlike toggle button & displayed like count
+- Added Post Edit & Delete buttons to single post
 
 ## How to run
 Follow these steps to set up and run the Django project locally.

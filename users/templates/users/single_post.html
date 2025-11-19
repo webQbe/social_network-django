@@ -28,6 +28,26 @@
                 <img src="{{ post.upload_image.url }}" alt="Post Image" style="max-width: 100%;">
              {% endif %}
              <hr>
+            <span>{{ post.total_likes }} {{ post.total_likes|pluralize:"Like,Likes" }}</span>
+           <div style="display: flex; flex-wrap: wrap;">
+                <form method="post" action="{% url 'like_post' post.post_id %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                    {% if user in post.likes.all %}
+                        <button type="submit" class="btn btn-danger">Unlike</button>
+                    {% else %}
+                        <button type="submit" class="btn btn-primary">Like</button>
+                    {% endif %}
+                </form>
+                {% if post.user == request.user %}
+                     <a href="{% url 'post_edit' post.post_id %}" style="float:left; margin-left:8px;">
+                        <button class="btn btn-success">Edit</button>
+                    </a>
+                    <a href="{% url 'h_post_delete' post.post_id %}" style="float:left; margin-left:8px;">
+                        <button class="btn btn-danger">Delete</button>
+                    </a>
+                {% endif %}
+            </div>
 
               <!-- Display the comments -->
               <h3>Comments:</h3>

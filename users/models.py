@@ -8,11 +8,16 @@ class Post(models.Model):
     post_content = models.TextField(blank=True, null=True)
     upload_image = models.ImageField(upload_to='imagepost/', blank=True, null=True)
     post_date = models.DateTimeField(auto_now_add=True)
+    likes = models.ManyToManyField(User, related_name='liked_posts', blank=True)
 
     def __str__(self):
         # Ensure post_content is not None
         post_content_preview = self.post_content[:20] if self.post_content else ""
         return f'{self.user.username} - {post_content_preview}'
+    
+    @property
+    def total_likes(self):
+        return self.likes.count()
 
 
 class Comment(models.Model):
