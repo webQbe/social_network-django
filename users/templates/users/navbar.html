@@ -9,34 +9,93 @@
      <!-- Include any additional CSS here -->
      <link rel="stylesheet" type="text/css" href="{% static 'users/style/main_style.css' %}">
 <style>
-    #cover-img{
-                height: 400px;
-                width: 100%;
-            } 
-
     #profile-img{
         position: absolute;
-        top: 230px;
-        left: 40px;
-    }
-
-    #update_profile{
-        position: relative;
-        top: -33px;
-        cursor: pointer;
-        left:93px;
-        border-radius: 4px;
-        background-color: rgba(0,0,0,0.1);
-        transform: translate(-50%, -50%);
+        top: 20rem;
+        left: 6rem;
+        z-index: 2;
+        text-align: center;
     }
 
     #button_profile {
         position: absolute;
-        top: 78%;
+        top: 70%;
         left: 50%;
         cursor: pointer;
         transform: translate(-50%, -50%);
     }
+
+    /* make update/select buttons stack under the portrait */
+    #update_profile,
+    #button_profile, #cover-controls {
+            position: static !important;
+            transform: none !important;
+            display: inline-block;
+            margin: auto;
+    }
+
+
+    @media (min-width: 768px) {
+            #cover-img img {
+                        height: 400px;
+                        width: 100%;
+                    } 
+
+            #update_cover {
+                position: absolute;
+                top: 15%;
+                left: 10%;
+                cursor: pointer;
+                transform: translate(-50%, -50%);
+                z-index: 3;
+            }
+
+            #profile-img #cover-controls {
+                display: none;
+            }
+
+        }
+
+    /* --- Responsive: mobile / narrow screens --- */
+    @media (max-width: 767px) {
+        #cover-img{
+                position: static !important;
+                height: 400px;
+                width: 100%;
+            } 
+
+        /* let the profile block flow below the cover image */
+        #profile-img {
+            position: static !important;
+            margin-top: 12px;
+            text-align: center;
+        }  
+        
+    #profile-img #cover-controls {
+            top: 15%;
+            left: 10%;
+            cursor: pointer;
+            transform: translate(-50%, -50%);
+        }  
+
+        #update_cover {
+                display: none;
+        }
+
+        /* make dropdown contents flow under the button */
+        #cover-controls {
+            position: static !important;
+            display: block !important;
+            float: none;
+            margin: 8px auto;
+        }
+    }
+
+
+    #bs-example-navbar-collapse-1 {
+        overflow: hidden;
+    }
+
 
     .pagination a{
         color: black;
@@ -236,7 +295,7 @@
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-target="#bs-example-navbar-collapse-1" data-toggle="collapse" aria-expanded="false">
+                <button type="button" class="navbar-toggle collapsed" data-target="#bs-example-navbar-collapse-1" data-toggle="collapse" aria-expanded="false" style="overflow: hidden;">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>

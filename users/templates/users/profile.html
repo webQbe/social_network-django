@@ -17,28 +17,49 @@
     <div class="col-sm-14">
         <div>
             <!-- Display the cover image -->
-            <div>
-                <img id="cover-img" class="img-rounded" src="{{ user_profile.user_cover.url }}" alt="cover">
-            </div>
-
-            <!-- Form to update the cover image -->
-            <form action="{% url 'update_cover' user.id %}" method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
-                <ul class="nav pull-left" style="position:absolute; top:80px; left:40px;">
-                    <li class="dropdown">
-                        <button class="dropdown-toggle btn btn-default" data-toggle="dropdown">Change Cover</button>
-                        <div class="dropdown-menu">
-                            <center>
-                                <p>Click <strong>Select Cover</strong> and then click the <br> <strong>Update Cover</strong></p>
-                                <label class="btn btn-info">Select Cover
-                                    <input type="file" name="user_cover" size="60" />
-                                </label><br><br>
-                                <button name="submit" class="btn btn-info">Update Cover</button>
-                            </center>
+            <div id="cover-img">
+                <img src="{{ user_profile.user_cover.url }}" alt="cover">
+                <!-- Form to update the cover image -->
+                <form id="update_cover" action="{% url 'update_cover' user.id %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <ul id="cover-controls" class="nav pull-left">
+                        <li class="dropdown">
+                            <button class="dropdown-toggle btn btn-default" data-toggle="dropdown">Change Cover</button>
+                            <div class="dropdown-menu">
+                                <center>
+                                    <p>Click <strong>Select Cover</strong> and then click the <br> <strong>Update Cover</strong></p>
+                                    <label class="btn btn-info">Select Cover
+                                        <input type="file" name="user_cover" size="60" />
+                                    </label><br><br>
+                                    <button name="submit" class="btn btn-info">Update Cover</button>
+                                </center>
+                            </div>
+                        </li>
+                    </ul>
+                    {% if form.errors %}
+                        <div class="alert alert-danger">
+                        <ul>
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
                         </div>
-                    </li>
-                </ul>
-                {% if form.errors %}
+                    {% endif %}
+                </form>
+            </div>
+            <!-- Display the profile image -->
+            <div id="profile-img">
+                <img src="{{ user_profile.user_image.url }}" alt="Profile" class="img-circle" width="180px" height="185px">
+                <!-- Form to update the profile image -->
+                <form action="{% url 'update_image' user.id %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <label id="update_profile">Select Image
+                            <input type="file" name="user_image" size="60" />
+                    </label><br><br>
+                    <button id="button_profile" name="update" class="btn btn-info">Update Profile</button>
+                    {% if form.errors %}
                     <div class="alert alert-danger">
                     <ul>
                         {% for field in form %}
@@ -48,33 +69,38 @@
                         {% endfor %}
                     </ul>
                     </div>
-                {% endif %}
-            </form>
-        </div>
-        <!-- Display the profile image -->
-        <div id="profile-img">
-            <img src="{{ user_profile.user_image.url }}" alt="Profile" class="img-circle" width="180px" height="185px">
-
-            <!-- Form to update the profile image -->
-            <form action="{% url 'update_image' user.id %}" method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            <label id="update_profile">Select Image
-                    <input type="file" name="user_image" size="60" />
-            </label><br><br>
-            <button id="button_profile" name="update" class="btn btn-info">Update Profile</button>
-            {% if form.errors %}
-            <div class="alert alert-danger">
-            <ul>
-                {% for field in form %}
-                    {% for error in field.errors %}
-                        <li>{{ error }}</li>
-                    {% endfor %}
-                {% endfor %}
-            </ul>
+                    {% endif %}
+                </form>
+                <form action="{% url 'update_cover' user.id %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <ul id="cover-controls" class="nav pull-left">
+                        <li class="dropdown">
+                            <button class="dropdown-toggle btn btn-default" data-toggle="dropdown">Change Cover</button>
+                            <div class="dropdown-menu">
+                                <center>
+                                    <p>Click <strong>Select Cover</strong> and then click the <br> <strong>Update Cover</strong></p>
+                                    <label class="btn btn-info">Select Cover
+                                        <input type="file" name="user_cover" size="60" />
+                                    </label><br><br>
+                                    <button name="submit" class="btn btn-info">Update Cover</button>
+                                </center>
+                            </div>
+                        </li>
+                    </ul>
+                    {% if form.errors %}
+                        <div class="alert alert-danger">
+                        <ul>
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
+                        </div>
+                    {% endif %}
+                </form> 
             </div>
-            {% endif %}
-            </form>
-        </div><br>
+        </div>
     </div>
     <div class="col-sm-1">
     </div>
@@ -89,6 +115,10 @@
         <p><strong>Member since: </strong>{{ user_profile.user_reg_date }}</p><br>
         <p><strong>Gender: </strong>{{ user_profile.user_gender }}</p><br>
         <p><strong>Date of birth: </strong>{{ user_profile.user_birthday }}</p><br>
+        <!-- show follower count -->
+        <span class="ml-2">
+            {{ follower_count }} {{ follower_count|pluralize:"Follower,Followers" }}
+        </span> <br> <br>
         {% if is_own_profile %}
             <a href="{% url 'edit_profile' %}" class="btn btn-success">Edit Profile</a>
         {% else %}
@@ -102,10 +132,6 @@
                 {% endif %}
             </form>
         {% endif %}
-        <!-- show follower count -->
-        <span class="ml-2">
-            {{ follower_count }} {{ follower_count|pluralize:"Follower,Followers" }}
-        </span>
     </div>
     <div class="col-sm-8" style="margin: 1% 1% 1% 5%; ">
         <!-- display user posts -->
