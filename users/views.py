@@ -382,7 +382,8 @@ def find_people_view(request):
         )
 
     elif search_query == "":
-        users = User.objects.all()
+        # Hide superusers
+        users = User.objects.all().exclude(is_superuser=True)
     
     else:
         # If no search term is provided, retrieve all users
@@ -434,6 +435,8 @@ def user_posts_view(request, user_id):
 def messages_view(request, u_id=None):
     # get all users except logged in user
     users = User.objects.exclude(id=request.user.id)
+    # Hide superusers
+    users = users.exclude(is_superuser=True)
 
     # get logged in user
     sender = request.user
