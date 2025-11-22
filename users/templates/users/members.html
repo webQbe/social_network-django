@@ -29,10 +29,10 @@
                             <div class="row" id="find_people">
                                 <div class="col-sm-4">
                                     <a href="{% if user.userprofile %}{% url 'profile' user.id %}{% else %}{% url 'find_people' %}{% endif %}">
-                                            <img src="{% if user.userprofile %}{{ user.userprofile.user_image.url }}{% else %}{% static 'default_profile.png' %}{% endif %}" width="150px" height="140px" alt="{{ user.username }}" title="{{ user.username }}" style="float: left; margin: 1px;">
-                                    </a>`
+                                            <img class="img-circle" src="{% if user.userprofile %}{{ user.userprofile.user_image.url }}{% else %}{% static 'default_profile.png' %}{% endif %}" width="150px" height="140px" alt="{{ user.username }}" title="{{ user.username }}" style="float: left; margin: 1px;">
+                                    </a>
                                 </div><br><br>
-                                <div class="col-sm-6" style="margin-left: 1%;">
+                                <div class="col-sm-6" id="fullname">
                                     <a href="{% url 'profile' user.id %}" style="text-decoration: None; cursor: pointer; color: #3897F0;">
                                     <strong><h3>{{ user.first_name }} {{ user.last_name }}</h3></strong>
                                     </a>
